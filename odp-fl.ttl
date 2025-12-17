@@ -1,0 +1,577 @@
+@prefix : <https://w3id.org/iof/odp/functional-location#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix fl: <https://w3id.org/iof/odp/functional-location#> .
+@prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
+@prefix iao: <http://purl.obolibrary.org/obo/IAO_> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iof-core: <https://spec.industrialontologies.org/ontology/core/Core/> .
+@prefix iof-maint: <https://spec.industrialontologies.org/ontology/maintenance/Maintenance/> .
+@base <https://w3id.org/iof/odp/functional-location#> .
+
+<https://w3id.org/iof/odp/functional-location> rdf:type owl:Ontology ;
+                                                owl:imports <http://purl.obolibrary.org/obo/iao.owl> ,
+                                                            <http://purl.obolibrary.org/obo/bfo/2020/bfo.owl> ,
+                                                            iof-core: ;
+                                                dcterms:contributor "Haroldo Rojas"@en ,
+                                                                    "Mara Abel"@en ,
+                                                                    "Rafael Petry"@en ,
+                                                                    "Regis Romeu"@en ,
+                                                                    "UFRGS Institute of Informatics"@en ,
+                                                                    "Cauã Antunes" ,
+                                                                    "Joel Carbonera" ;
+                                                dcterms:created "2025-12-17" ;
+                                                dcterms:creator "Nicolau Santos"@en ;
+                                                dcterms:description "An ontology design pattern for modeling functional locations (FL) as persistent spatial sites in industrial asset management systems. This pattern addresses the persistence problem: maintaining semantic continuity of operational data when physical equipment is replaced while preserving organizational hierarchies."@en ;
+                                                dcterms:license <http://opensource.org/licenses/MIT> ;
+                                                dcterms:modified "2025-01-05"^^xsd:date ;
+                                                dcterms:subject "Equipment Tracking"@en ,
+                                                                "Functional Location"@en ,
+                                                                "ISO 14224"@en ,
+                                                                "Industrial Asset Management"@en ;
+                                                dcterms:title "Functional Location Ontology Design Pattern"@en ;
+                                                rdfs:comment "This pattern instantiates an abstract ODP with three core elements: Location (persistent spatial position), LocationCode (hierarchical identifier), and Equipment (physical asset) using Basic Formal Ontology (BFO)."@en ;
+                                                owl:versionInfo "1.0.0" ;
+                                                skos:historyNote "Developed to address the gap in IOF-Maint (2025) which does not model functional locations as persistent spatial entities."@en .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/terms/created
+dcterms:created rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/subject
+dcterms:subject rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2004/02/skos/core#historyNote
+skos:historyNote rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Datatypes
+#################################################################
+
+###  http://www.w3.org/2001/XMLSchema#date
+xsd:date rdf:type rdfs:Datatype .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  https://w3id.org/iof/odp/functional-location#hasBoundaryDeterminedBy
+fl:hasBoundaryDeterminedBy rdf:type owl:ObjectProperty ;
+                           rdfs:domain fl:FunctionalLocation ;
+                           rdfs:range <http://purl.obolibrary.org/obo/BFO_0000030> ;
+                           rdfs:comment "Supports BFO site semantics defense (Section 4.3 of paper)"@en ;
+                           rdfs:label "has boundary determined by"@en ;
+                           skos:definition """Material entity that provides reference frame for site boundaries 
+    (per BFO option (b) for sites)."""@en ;
+                           skos:example "FL_PT23424 hasBoundaryDeterminedBy DeckC_Structure"@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#hasSystemSitePart
+fl:hasSystemSitePart rdf:type owl:ObjectProperty ;
+                     owl:inverseOf fl:partOfSystemSite ;
+                     rdfs:label "has system site part"@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#hasTag
+fl:hasTag rdf:type owl:ObjectProperty ;
+          rdfs:domain fl:Equipment ;
+          rdfs:range fl:EquipmentTag ;
+          owl:propertyChainAxiom ( fl:installedAt
+                                   [ owl:inverseOf fl:identifies
+                                   ]
+                                 ) ;
+          rdfs:comment "Axiom B3: installedAt ∘ identifies⁻¹ ⊑ hasTag (property chain)"@en ;
+          rdfs:label "has tag"@en ;
+          skos:definition "Derived relation: equipment 'has' the tag identifying its installation site."@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#hostedBy
+fl:hostedBy rdf:type owl:ObjectProperty ;
+            rdfs:domain fl:Sensor ;
+            rdfs:range fl:Equipment ;
+            rdfs:comment "Optional extension (Section 4.4 of paper)"@en ;
+            rdfs:label "hosted by"@en ;
+            skos:definition """Sensor physically mounted on another equipment item. Sensor has 
+    its own functional location but is hosted by another equipment."""@en ;
+            skos:example "Sensor PT-23424 hostedBy Valve XV-22342"@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#identifies
+fl:identifies rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf <http://purl.obolibrary.org/obo/IAO_0000136> ;
+              rdf:type owl:FunctionalProperty ;
+              rdfs:domain fl:FunctionalLocationCode ;
+              rdfs:range fl:FunctionalLocation ;
+              rdfs:comment """Maps to abstract ODP relation 'identifies(code, location)'. 
+    Functional property enforces code uniqueness (Axiom A1)."""@en ;
+              rdfs:label "identifies"@en ;
+              skos:definition "A functional location code uniquely identifies a functional location."@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#identifiesEquipment
+fl:identifiesEquipment rdf:type owl:ObjectProperty ;
+                       rdfs:subPropertyOf <http://purl.obolibrary.org/obo/IAO_0000136> ;
+                       rdfs:domain fl:EquipmentTag ;
+                       rdfs:range fl:Equipment ;
+                       rdfs:label "identifies equipment"@en ;
+                       skos:definition "An equipment tag identifies a physical equipment instance."@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#indexedBySite
+fl:indexedBySite rdf:type owl:ObjectProperty ,
+                          owl:FunctionalProperty ;
+                 rdfs:domain fl:TimeStampedMeasuredDataset ;
+                 rdfs:range fl:FunctionalLocation ;
+                 rdfs:comment """KEY PATTERN: Enables automatic continuity without application logic 
+    to 'stitch' data from different equipment instances (FR5)."""@en ;
+                 rdfs:label "indexed by site"@en ;
+                 rdfs:seeAlso "CQ2: Temporal continuity across replacements"@en ,
+                              "CQ6: Maintenance note to time series integration"@en ;
+                 skos:definition """Time series dataset indexed by functional location (not equipment) 
+    to maintain semantic continuity across equipment replacements."""@en ;
+                 skos:example "TS_Pressure_PT23424 indexedBySite FL_PT23424_Site" .
+
+
+###  https://w3id.org/iof/odp/functional-location#installedAt
+fl:installedAt rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf <http://purl.obolibrary.org/obo/BFO_0000171> ;
+               rdfs:domain fl:Equipment ;
+               rdfs:range fl:FunctionalLocation ;
+               rdfs:comment """Maps to abstract ODP relation 'installedAt(equipment, location)'. 
+    Temporally bounded via installedDate/removedDate properties (Axiom A3)."""@en ;
+               rdfs:label "installed at"@en ;
+               rdfs:seeAlso "CQ1: Which equipment currently at FL?"@en ,
+                            "CQ4: Tag to code resolution"@en ;
+               skos:definition """Equipment is installed at a functional location during some 
+    temporally bounded period."""@en ;
+               skos:example "Sensor_PT23424_v2 installedAt FL_PT23424_Site (2017-06-16 to 2022-03-10)" .
+
+
+###  https://w3id.org/iof/odp/functional-location#partOfSystemSite
+fl:partOfSystemSite rdf:type owl:ObjectProperty ;
+                    rdfs:subPropertyOf <http://purl.obolibrary.org/obo/BFO_0000050> ;
+                    rdf:type owl:TransitiveProperty ;
+                    rdfs:domain fl:FunctionalLocation ;
+                    rdfs:range fl:FunctionalLocation ;
+                    rdfs:comment """Maps to abstract ODP relation 'partOfLocation(sublocation, location)'. 
+    Transitive and acyclic (Axiom A2)."""@en ;
+                    rdfs:label "part of system site"@en ;
+                    rdfs:seeAlso "CQ3: List all items in subsystem"@en ;
+                    skos:definition """Hierarchical composition of functional locations. Enables transitive 
+    queries across ISO 14224 hierarchy levels."""@en ;
+                    skos:example "MaintainableItemSite partOfSystemSite SubsystemSite" ,
+                                 "SubsystemSite partOfSystemSite SystemSite" .
+
+
+###  https://w3id.org/iof/odp/functional-location#performedAt
+fl:performedAt rdf:type owl:ObjectProperty ;
+               rdfs:domain fl:MaintenanceNote ;
+               rdfs:range fl:FunctionalLocation ;
+               rdfs:comment "Supports CQ6: Linking maintenance notes to time series data via shared site reference"@en ;
+               rdfs:label "performed at"@en ;
+               skos:definition "Maintenance note created for work performed at functional location."@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#performedAtLocation
+fl:performedAtLocation rdf:type owl:ObjectProperty ;
+                       rdfs:domain iof-maint:MaintenanceActivity ;
+                       rdfs:range fl:FunctionalLocation ;
+                       rdfs:label "performed at location"@en ;
+                       skos:definition """Maintenance activity performed at a functional location. Enables 
+    IOF-Maint activities to be queried in spatial-organizational context."""@en ;
+                       skos:example "MaintenanceActivity_2023_05_15 performedAtLocation FL_PT23424_Site" .
+
+
+###  https://w3id.org/iof/odp/functional-location#requiresRole
+fl:requiresRole rdf:type owl:ObjectProperty ;
+                rdfs:domain fl:FunctionalLocation ;
+                rdfs:range fl:RequiredRole ;
+                rdfs:label "requires role"@en ;
+                skos:definition "Functional location requires equipment with specific functional role."@en ;
+                skos:example "FL_XV22342_Site requiresRole VariableChokingRole" .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  https://w3id.org/iof/odp/functional-location#hasCoordinateX
+fl:hasCoordinateX rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain fl:FunctionalLocation ;
+                  rdfs:range xsd:double ;
+                  rdfs:comment "Supports spatial reasoning (FR6). Boundary determination per BFO option (b)."@en ;
+                  rdfs:label "has coordinate X"@en ;
+                  skos:definition "X coordinate of functional location relative to material reference frame."@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#hasCoordinateY
+fl:hasCoordinateY rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain fl:FunctionalLocation ;
+                  rdfs:range xsd:double ;
+                  rdfs:label "has coordinate Y"@en ;
+                  skos:definition "Y coordinate of functional location relative to material reference frame."@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#hasCoordinateZ
+fl:hasCoordinateZ rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain fl:FunctionalLocation ;
+                  rdfs:range xsd:double ;
+                  rdfs:label "has coordinate Z"@en ;
+                  skos:definition "Z coordinate (elevation) of functional location relative to material reference frame."@en ;
+                  skos:example "Z: +12.6m (Deck C level on platform P-74)"@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#hasSeriesLabel
+fl:hasSeriesLabel rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain fl:TimeStampedMeasuredDataset ;
+                  rdfs:range xsd:string ;
+                  rdfs:comment "Supports CQ7: Series label lookup"@en ;
+                  rdfs:label "has series label"@en ;
+                  rdfs:seeAlso "CQ7: Time series lookup by label"@en ;
+                  skos:definition "User-facing label for time series dataset."@en ;
+                  skos:example "SAUIRIO.P-74-2342.2342-0982" .
+
+
+###  https://w3id.org/iof/odp/functional-location#installedDate
+fl:installedDate rdf:type owl:DatatypeProperty ,
+                          owl:FunctionalProperty ;
+                 rdfs:domain fl:Equipment ;
+                 rdfs:range xsd:dateTime ;
+                 rdfs:comment "Axiom A3: Installation temporally bounded (start)"@en ;
+                 rdfs:label "installed date"@en ;
+                 skos:definition "Timestamp when equipment was installed at functional location."@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#noteText
+fl:noteText rdf:type owl:DatatypeProperty ;
+            rdfs:domain fl:MaintenanceNote ;
+            rdfs:range xsd:string ;
+            rdfs:label "note text"@en ;
+            skos:definition "Textual content of maintenance note."@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#noteTimestamp
+fl:noteTimestamp rdf:type owl:DatatypeProperty ,
+                          owl:FunctionalProperty ;
+                 rdfs:domain fl:MaintenanceNote ;
+                 rdfs:range xsd:dateTime ;
+                 rdfs:label "note timestamp"@en ;
+                 skos:definition "Timestamp when maintenance note was created."@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#removedDate
+fl:removedDate rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain fl:Equipment ;
+               rdfs:range xsd:dateTime ;
+               rdfs:comment "Axiom A3: Installation temporally bounded (end). Absence indicates currently installed."@en ;
+               rdfs:label "removed date"@en ;
+               skos:definition "Timestamp when equipment was removed from functional location (optional)."@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#storedAt
+fl:storedAt rdf:type owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;
+            rdfs:domain fl:TimeStampedMeasuredDataset ;
+            rdfs:range xsd:anyURI ;
+            rdfs:label "stored at"@en ;
+            skos:definition "URI of storage system (e.g., InfluxDB) where time series data is physically stored."@en ;
+            skos:example "influxdb://p74/pressure/pt23424"^^xsd:anyURI .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  https://spec.industrialontologies.org/ontology/maintenance/Maintenance/DegradedState
+iof-maint:DegradedState rdf:type owl:Class .
+
+
+###  https://spec.industrialontologies.org/ontology/maintenance/Maintenance/FailedState
+iof-maint:FailedState rdf:type owl:Class .
+
+
+###  https://spec.industrialontologies.org/ontology/maintenance/Maintenance/MaintainableMaterialItem
+iof-maint:MaintainableMaterialItem rdf:type owl:Class .
+
+
+###  https://spec.industrialontologies.org/ontology/maintenance/Maintenance/MaintenanceActivity
+iof-maint:MaintenanceActivity rdf:type owl:Class .
+
+
+###  https://spec.industrialontologies.org/ontology/maintenance/Maintenance/OperatingState
+iof-maint:OperatingState rdf:type owl:Class .
+
+
+###  https://w3id.org/iof/odp/functional-location#Equipment
+fl:Equipment rdf:type owl:Class ;
+             rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000030> ,
+                             iof-maint:MaintainableMaterialItem ;
+             rdfs:comment """Maps to abstract ODP element 'Equipment'. Transient entity contrasting 
+    with persistent FunctionalLocation (Axiom A4)."""@en ;
+             rdfs:label "Equipment"@en ;
+             skos:definition """A physical asset that can be installed at a functional location. 
+    Equipment items are transient—manufactured, installed, maintained, and eventually 
+    decommissioned. The same location may host different equipment instances over time."""@en ;
+             skos:example "Valve instance Sensor_PT23424_v1 (2015-2017)" ,
+                          "Valve instance Sensor_PT23424_v2 (2017-2022)" ,
+                          "Valve instance Sensor_PT23424_v3 (2022-present)" .
+
+
+###  https://w3id.org/iof/odp/functional-location#EquipmentTag
+fl:EquipmentTag rdf:type owl:Class ;
+                rdfs:subClassOf <http://purl.obolibrary.org/obo/IAO_0000578> ;
+                owl:disjointWith fl:FunctionalLocationCode ;
+                rdfs:comment """Maps to abstract ODP element 'LocationCode' (equipment variant). 
+    Disjoint from FunctionalLocationCode (Axiom: different identifier types)."""@en ;
+                rdfs:label "Equipment Tag"@en ;
+                skos:definition """Identifier that denotes a physical equipment item. Tags reference 
+    the functional location where equipment is or was installed."""@en ;
+                skos:example "PT-23424" ,
+                             "XV-23423" .
+
+
+###  https://w3id.org/iof/odp/functional-location#EquipmentUnitSite
+fl:EquipmentUnitSite rdf:type owl:Class ;
+                     rdfs:subClassOf fl:FunctionalLocation ;
+                     rdfs:comment "ISO 14224 Level 4: Equipment Unit"@en ;
+                     rdfs:label "Equipment Unit Site"@en ;
+                     skos:definition "Functional location representing a unit within a subsystem."@en ;
+                     skos:example "Valve assembly site within Inlet Separator subsystem"@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#FunctionalLocation
+fl:FunctionalLocation rdf:type owl:Class ;
+                      rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000029> ;
+                      rdfs:comment """Maps to abstract ODP element 'Location'. Persists when equipment 
+    removed (FR1). Supports ISO 14224 five-level hierarchical structure (FR2)."""@en ;
+                      rdfs:label "Functional Location"@en ;
+                      rdfs:seeAlso "CQ1: Current equipment assignment"@en ,
+                                   "CQ3: Hierarchical navigation"@en ,
+                                   "CQ5: Spatial proximity"@en ;
+                      skos:definition """A persistent spatial site representing a position in an industrial 
+    hierarchy where equipment is or can be installed. Functional locations exist 
+    independently of equipment presence, enabling temporal continuity of operational data 
+    across equipment replacements."""@en ;
+                      skos:example "Site FL_XV23423 for valve XV-23423 in gas dehydration system"@en ;
+                      skos:scopeNote """Boundaries determined IN RELATION TO material reference frames 
+    (e.g., platform deck structure coordinates) per BFO option (b) for sites."""@en ,
+                                     "Persistent entity supporting FR1, FR2, FR6"@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#FunctionalLocationCode
+fl:FunctionalLocationCode rdf:type owl:Class ;
+                          rdfs:subClassOf <http://purl.obolibrary.org/obo/IAO_0000578> ;
+                          rdfs:comment """Maps to abstract ODP element 'LocationCode'. Reflects organizational 
+    structure (FR2, FR3). Uniquely identifies functional location (Axiom A1)."""@en ;
+                          rdfs:label "Functional Location Code"@en ;
+                          skos:definition """Hierarchical identifier that denotes a functional location following 
+    ISO 14224 coding scheme. Code segments encode organizational hierarchy levels."""@en ;
+                          skos:example "30142.FSGE.FEW.10.01.1" ,
+                                       "30234.FSFS.FWSF.10.01.01" .
+
+
+###  https://w3id.org/iof/odp/functional-location#MaintainableItemSite
+fl:MaintainableItemSite rdf:type owl:Class ;
+                        rdfs:subClassOf fl:FunctionalLocation ;
+                        rdfs:comment "ISO 14224 Level 5: Maintainable Item"@en ;
+                        rdfs:label "Maintainable Item Site"@en ;
+                        skos:definition """Lowest level functional location where a single maintainable item 
+    is or can be installed."""@en ;
+                        skos:example "Site FL_PT23424 for individual sensor PT-23424"@en ,
+                                     "Site FL_XV23423 for individual valve XV-23423"@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#MaintenanceNote
+fl:MaintenanceNote rdf:type owl:Class ;
+                   rdfs:subClassOf <http://purl.obolibrary.org/obo/IAO_0000100> ;
+                   rdfs:label "Maintenance Note"@en ;
+                   skos:definition "Textual note created during maintenance work, anchored to functional location."@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#PlantSite
+fl:PlantSite rdf:type owl:Class ;
+             rdfs:subClassOf fl:FunctionalLocation ;
+             rdfs:comment "ISO 14224 Level 1: Plant"@en ;
+             rdfs:label "Plant Site"@en ;
+             skos:definition "Highest level functional location representing an entire industrial plant."@en ;
+             skos:example "Offshore platform P-74"@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#RequiredRole
+fl:RequiredRole rdf:type owl:Class ;
+                rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000023> ;
+                rdfs:comment "Optional extension integrating Compagno & Borgo (2023) functional ontology"@en ;
+                rdfs:label "Required Role"@en ;
+                skos:definition """Role specifying functional requirements for equipment at a 
+    functional location (e.g., 'variable choking capability', 'high-pressure control')."""@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#Sensor
+fl:Sensor rdf:type owl:Class ;
+          rdfs:subClassOf fl:Equipment ;
+          rdfs:label "Sensor"@en ;
+          skos:definition "Equipment that measures physical properties (pressure, temperature, flow)."@en ;
+          skos:example "Pressure sensor PT-23424" .
+
+
+###  https://w3id.org/iof/odp/functional-location#SubsystemSite
+fl:SubsystemSite rdf:type owl:Class ;
+                 rdfs:subClassOf fl:FunctionalLocation ;
+                 rdfs:comment "ISO 14224 Level 3: Subsystem"@en ;
+                 rdfs:label "Subsystem Site"@en ;
+                 skos:definition "Functional location representing a subsystem within a system."@en ;
+                 skos:example "Inlet Separator subsystem site within Gas Dehydration System"@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#SystemSite
+fl:SystemSite rdf:type owl:Class ;
+              rdfs:subClassOf fl:FunctionalLocation ;
+              rdfs:comment "ISO 14224 Level 2: System"@en ;
+              rdfs:label "System Site"@en ;
+              skos:definition "Functional location representing a major system within a plant."@en ;
+              skos:example "Gas Dehydration System site within platform P-74"@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#TimeStampedMeasuredDataset
+fl:TimeStampedMeasuredDataset rdf:type owl:Class ;
+                              rdfs:subClassOf <http://purl.obolibrary.org/obo/IAO_0000100> ;
+                              rdfs:comment "Supports CQ2: Temporal continuity across equipment replacements"@en ;
+                              rdfs:label "Time-Stamped Measured Dataset"@en ;
+                              skos:definition """Dataset containing time-series observations (sensor readings) 
+    indexed by functional location for persistent data anchoring."""@en .
+
+
+###  https://w3id.org/iof/odp/functional-location#Valve
+fl:Valve rdf:type owl:Class ;
+         rdfs:subClassOf fl:Equipment ;
+         rdfs:label "Valve"@en ;
+         skos:definition "Equipment that controls fluid flow in piping systems."@en ;
+         skos:example "Block valve XV-23423" .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  https://w3id.org/iof/odp/functional-location#Code_PT23424
+fl:Code_PT23424 rdf:type owl:NamedIndividual ,
+                         fl:FunctionalLocationCode ;
+                fl:identifies fl:FL_PT23424_Site ;
+                rdfs:label "30234.FSFS.FWSF.10.01.01" .
+
+
+###  https://w3id.org/iof/odp/functional-location#FL_PT23424_Site
+fl:FL_PT23424_Site rdf:type owl:NamedIndividual ,
+                            fl:MaintainableItemSite ;
+                   fl:partOfSystemSite fl:InletSeparator_Site ;
+                   fl:hasCoordinateX "145.4"^^xsd:double ;
+                   fl:hasCoordinateY "67.8"^^xsd:double ;
+                   fl:hasCoordinateZ "12.6"^^xsd:double ;
+                   rdfs:comment "Coordinates relative to Deck C structure (material reference frame)"@en ;
+                   rdfs:label "Functional Location PT-23424" .
+
+
+###  https://w3id.org/iof/odp/functional-location#GasDehydrationSystem_Site
+fl:GasDehydrationSystem_Site rdf:type owl:NamedIndividual ,
+                                      fl:SystemSite ;
+                             fl:partOfSystemSite fl:P74_Platform ;
+                             rdfs:label "Gas Dehydration System Site" .
+
+
+###  https://w3id.org/iof/odp/functional-location#InletSeparator_Site
+fl:InletSeparator_Site rdf:type owl:NamedIndividual ,
+                                fl:SubsystemSite ;
+                       fl:partOfSystemSite fl:GasDehydrationSystem_Site ;
+                       rdfs:label "Inlet Separator Site" .
+
+
+###  https://w3id.org/iof/odp/functional-location#P74_Platform
+fl:P74_Platform rdf:type owl:NamedIndividual ,
+                         fl:PlantSite ;
+                rdfs:comment "Example instance from case study (Section 5)"@en ;
+                rdfs:label "Platform P-74" .
+
+
+###  https://w3id.org/iof/odp/functional-location#Sensor_PT23424_v1
+fl:Sensor_PT23424_v1 rdf:type owl:NamedIndividual ,
+                              fl:Sensor ;
+                     fl:installedAt fl:FL_PT23424_Site ;
+                     fl:installedDate "2015-01-01T00:00:00"^^xsd:dateTime ;
+                     fl:removedDate "2017-06-15T10:30:00"^^xsd:dateTime ;
+                     rdfs:label "Sensor PT-23424 v1" .
+
+
+###  https://w3id.org/iof/odp/functional-location#Sensor_PT23424_v2
+fl:Sensor_PT23424_v2 rdf:type owl:NamedIndividual ,
+                              fl:Sensor ;
+                     fl:installedAt fl:FL_PT23424_Site ;
+                     fl:installedDate "2017-06-16T08:00:00"^^xsd:dateTime ;
+                     fl:removedDate "2022-03-10T14:20:00"^^xsd:dateTime ;
+                     rdfs:label "Sensor PT-23424 v2" .
+
+
+###  https://w3id.org/iof/odp/functional-location#Sensor_PT23424_v3
+fl:Sensor_PT23424_v3 rdf:type owl:NamedIndividual ,
+                              fl:Sensor ;
+                     fl:installedAt fl:FL_PT23424_Site ;
+                     fl:installedDate "2022-03-11T09:15:00"^^xsd:dateTime ;
+                     rdfs:comment "Currently installed (no removal date)"@en ;
+                     rdfs:label "Sensor PT-23424 v3" .
+
+
+###  https://w3id.org/iof/odp/functional-location#TS_Pressure_PT23424
+fl:TS_Pressure_PT23424 rdf:type owl:NamedIndividual ,
+                                fl:TimeStampedMeasuredDataset ;
+                       fl:indexedBySite fl:FL_PT23424_Site ;
+                       fl:hasSeriesLabel "SAUIRIO.P-74-2342.2342-0982" ;
+                       fl:storedAt "influxdb://p74/pressure/pt23424"^^xsd:anyURI ;
+                       rdfs:comment "Spans 10 years and 3 sensor replacements (2015-2025)"@en ;
+                       rdfs:label "Pressure Time Series PT-23424" .
+
+
+###  https://w3id.org/iof/odp/functional-location#Tag_PT23424
+fl:Tag_PT23424 rdf:type owl:NamedIndividual ,
+                        fl:EquipmentTag ;
+               <http://purl.obolibrary.org/obo/IAO_0000136> fl:FL_PT23424_Site ;
+               rdfs:label "PT-23424" .
+
+
+###  https://w3id.org/iof/odp/functional-location#WorkOrder_2023_05_15
+fl:WorkOrder_2023_05_15 rdf:type owl:NamedIndividual ,
+                                 fl:MaintenanceNote ;
+                        fl:performedAt fl:FL_PT23424_Site ;
+                        fl:noteText "Pressure anomaly detected at PT-23424" ;
+                        fl:noteTimestamp "2023-05-15T14:30:00"^^xsd:dateTime ;
+                        rdfs:label "Maintenance Note 2023-05-15" .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( iof-maint:DegradedState
+                iof-maint:FailedState
+                iof-maint:OperatingState
+              )
+] .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
