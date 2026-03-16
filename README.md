@@ -186,7 +186,7 @@ This ontology imports and extends:
 
 ## Related Work
 
-This ODP is part of the **COPPP** (Core Ontology for Petroleum Production Plants) research program. It addresses a gap explicitly acknowledged by:
+This ODP is developed as part of the **COPPP** (Core Ontology for Petroleum Production Plants) doctoral research. It addresses a gap explicitly acknowledged by:
 
 - **IOF-Maint** (Woods et al., 2024) — simplifies FLs to strings, noting full modeling as future work
 - **IDO Working Draft** (Section 7.7) — editor's note acknowledges the "front office" persistence problem
@@ -194,20 +194,13 @@ This ODP is part of the **COPPP** (Core Ontology for Petroleum Production Plants
 
 ## Contributors
 
-| Name | Affiliation |
-|:---|:---|
-| Nicolau Santos | PPGC-UFRGS |
-| Mara Abel | UFRGS |
-| Haroldo Rojas | UFRGS |
-| Rafael Petry | UFRGS |
-| Regis Romeu | Petrobras |
-| Cauã Antunes | UFRGS |
-| Joel Carbonera | UFRGS |
-| Fabrício Rodrigues | UFRGS |
+Nicolau Santos · Mara Abel · Haroldo Rojas · Rafael Petry · Regis Romeu · Cauã Antunes · Joel Carbonera · Fabrício Rodrigues
+
+All contributors are affiliated with the **INF-UFRGS-ENERGIA** research group at the Institute of Informatics, Universidade Federal do Rio Grande do Sul (UFRGS), Porto Alegre, Brazil.
 
 ## Citation
 
-*Paper submitted to FOMI 2026. Citation details will be added upon acceptance.*
+*Paper in preparation. Citation details will be added upon submission.*
 
 ## License
 
