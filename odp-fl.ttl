@@ -8,16 +8,17 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-@prefix iof-av: <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/> .
+@prefix iof-av: <https://spec.industrialontologies.org/ontology/annotation/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix iof-core: <https://spec.industrialontologies.org/ontology/core/Core/> .
-@prefix iof-maint: <https://spec.industrialontologies.org/ontology/maintenance/Maintenance/> .
+@prefix iof-constr: <https://spec.industrialontologies.org/ontology/construct/> .
+@prefix src: <https://www.inf.ufrgs.br/ontologies/odp/functional-location/source-schema#> .
+@prefix iof-ind: <https://spec.industrialontologies.org/ontology/individual/> .
 @base <https://www.inf.ufrgs.br/ontologies/odp/functional-location/> .
 
 <https://www.inf.ufrgs.br/ontologies/odp/functional-location> rdf:type owl:Ontology ;
                                                                owl:imports <http://purl.obolibrary.org/obo/iao.owl> ,
                                                                            <http://purl.obolibrary.org/obo/bfo/2020/bfo.owl> ,
-                                                                           iof-core: ;
+                                                                           <https://spec.industrialontologies.org/ontology/202602/core/Core/> ;
                                                                dcterms:contributor "Cauã Antunes"@en ,
                                                                                    "Haroldo Rojas"@en ,
                                                                                    "Joel Carbonera"@en ,
@@ -29,7 +30,7 @@
                                                                dcterms:description "An ontology design pattern for modeling functional locations as persistent spatial sites in industrial asset management systems. The pattern separates four concerns: spatial site (bfo:Site), organizational code (iao:Identifier), equipment tag (iao:Identifier), and functional specification (iao:InformationContentEntity). Both identifiers denote the functional location site, not the physical equipment — the relationship to equipment is always mediated through the site."@en ,
                                                                                    "Um padrão de projeto ontológico para modelar locais de instalação como sítios espaciais persistentes em sistemas de gestão de ativos industriais. O padrão separa quatro preocupações: sítio espacial (bfo:Site), código do local de instalação (iao:Identifier), tag de equipamento (iao:Identifier) e especificação funcional (iao:InformationContentEntity). Ambos os identificadores denotam o local de instalação, não o equipamento físico — a relação com o equipamento é sempre mediada pelo sítio."@pt-br ;
                                                                dcterms:license <http://opensource.org/licenses/MIT> ;
-                                                               dcterms:modified "2026-03-16"^^xsd:date ;
+                                                               dcterms:modified "2026-06-27"^^xsd:date ;
                                                                dcterms:subject "Functional Location"@en ,
                                                                                "Gestão de Ativos Industriais"@pt-br ,
                                                                                "ISO 14224"@en ,
@@ -37,9 +38,9 @@
                                                                                "Local de Instalação"@pt-br ;
                                                                dcterms:title "Functional Location Ontology Design Pattern"@en ,
                                                                              "Padrão de Projeto Ontológico para Locais de Instalação"@pt-br ;
-                                                               owl:versionInfo "0.5" ;
-                                                               skos:historyNote "v0.1: Initial pattern. v0.2: Added specification class. v0.3: Corrected EquipmentTag semantics (denotes FL, not equipment). v0.4: Full IOF annotation compliance, bilingual EN/PT-BR annotations. v0.5: Added restricting logical axioms (cardinality, existential restrictions, hierarchy level constraints, disjointness), function universals, equipment type universals (COPPP style — primitive classes with necessary conditions)."@en ;
-                                                               iof-av:maturityLevel iof-av:Provisional .
+                                                               owl:versionInfo "0.8" ;
+                                                               skos:historyNote "v0.1: Initial pattern. v0.2: Added specification class. v0.3: Corrected EquipmentTag semantics (denotes FL, not equipment). v0.4: Full IOF annotation compliance, bilingual EN/PT-BR annotations. v0.5: Added restricting logical axioms (cardinality, existential restrictions, hierarchy level constraints, disjointness), function universals, equipment type universals (COPPP style — primitive classes with necessary conditions). v0.6: Reconciled to IOF Core Release_202602: iof-av: prefix updated to annotation/ namespace, iof-av:maturity replaces maturityLevel, Provisional/Released moved to iof-ind: namespace, MaintenanceActivity IRI corrected to iof-constr:, Equipment annotations updated to MaterialArtifact, Maintenance module added to owl:imports. v0.7: Widened hasBoundaryDeterminedBy range and the FunctionalLocation existential from BFO_0000030 (object) to BFO_0000040 (material entity), matching the FOL annotation and the paper; decoupled the IOF Maintenance dependency into the optional extension odp-fl-maint.ttl by removing the Maintenance import and the performedAtLocation property from the core. v0.8: Removed the intermediate fl:Equipment class; specific equipment types (Sensor, Valve, SeparationEquipment) now specialize iof-constr:MaterialArtifact directly per IOF Core guidance, and installedAt/installedDate/removedDate/hasTag/hostedBy were repointed to iof-constr:MaterialArtifact. The pre-existing FunctionalLocation-disjoint-with-MaterialArtifact axiom now carries the equipment/location disjointness."@en ;
+                                                               iof-av:maturity iof-ind:Provisional .
 
 #################################################################
 #    Annotation properties
@@ -57,42 +58,6 @@ dcterms:subject rdf:type owl:AnnotationProperty .
 skos:historyNote rdf:type owl:AnnotationProperty .
 
 
-###  https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/adaptedFrom
-iof-av:adaptedFrom rdf:type owl:AnnotationProperty .
-
-
-###  https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/explanatoryNote
-iof-av:explanatoryNote rdf:type owl:AnnotationProperty .
-
-
-###  https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/firstOrderLogicDefinition
-iof-av:firstOrderLogicDefinition rdf:type owl:AnnotationProperty .
-
-
-###  https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/isPrimitive
-iof-av:isPrimitive rdf:type owl:AnnotationProperty .
-
-
-###  https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/maturityLevel
-iof-av:maturityLevel rdf:type owl:AnnotationProperty .
-
-
-###  https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/naturalLanguageDefinition
-iof-av:naturalLanguageDefinition rdf:type owl:AnnotationProperty .
-
-
-###  https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/semiFormalNaturalLanguageDefinition
-iof-av:semiFormalNaturalLanguageDefinition rdf:type owl:AnnotationProperty .
-
-
-###  https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/synonym
-iof-av:synonym rdf:type owl:AnnotationProperty .
-
-
-###  https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/usageNote
-iof-av:usageNote rdf:type owl:AnnotationProperty .
-
-
 #################################################################
 #    Datatypes
 #################################################################
@@ -108,13 +73,13 @@ xsd:date rdf:type rdfs:Datatype .
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#hasBoundaryDeterminedBy
 fl:hasBoundaryDeterminedBy rdf:type owl:ObjectProperty ;
                            rdfs:domain fl:FunctionalLocation ;
-                           rdfs:range <http://purl.obolibrary.org/obo/BFO_0000030> ;
+                           rdfs:range <http://purl.obolibrary.org/obo/BFO_0000040> ;
                            rdfs:label "has boundary determined by"@en ,
                                       "tem limite determinado por"@pt-br ;
                            skos:example "FL_PT23424_Site hasBoundaryDeterminedBy DeckC_Structure"@en ;
                            iof-av:firstOrderLogicDefinition "hasBoundaryDeterminedBy(x,y) → FunctionalLocation(x) ∧ MaterialEntity(y) ∧ boundaryOf(x) determinedInRelationTo(y)"@en ;
                            iof-av:isPrimitive "true"^^xsd:boolean ;
-                           iof-av:maturityLevel iof-av:Provisional ;
+                           iof-av:maturity iof-ind:Provisional ;
                            iof-av:naturalLanguageDefinition "A relation between a functional location and a material entity such that the material entity provides the reference frame that determines the spatial boundaries of the functional location."@en ,
                                                             "Uma relação entre um local de instalação e uma entidade material tal que a entidade material fornece o referencial que determina os limites espaciais do local de instalação."@pt-br ;
                            iof-av:semiFormalNaturalLanguageDefinition "if x hasBoundaryDeterminedBy y then x is a FunctionalLocation and y is a MaterialEntity and the spatial boundaries of x are determined in relation to y"@en ;
@@ -126,12 +91,12 @@ fl:hasSystemSitePart rdf:type owl:ObjectProperty ;
                      owl:inverseOf fl:partOfSystemSite ;
                      rdfs:label "has system site part"@en ,
                                 "tem parte de sítio do sistema"@pt-br ;
-                     iof-av:maturityLevel iof-av:Provisional .
+                     iof-av:maturity iof-ind:Provisional .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#hasTag
 fl:hasTag rdf:type owl:ObjectProperty ;
-          rdfs:domain fl:Equipment ;
+          rdfs:domain iof-constr:MaterialArtifact ;
           rdfs:range fl:EquipmentTag ;
           owl:propertyChainAxiom ( fl:installedAt
                                    [ owl:inverseOf fl:identifiesLocation
@@ -143,7 +108,7 @@ fl:hasTag rdf:type owl:ObjectProperty ;
                                  "This relation captures the industrial pragmatic shorthand where engineers say 'valve XV-23424' to mean 'the valve currently installed at the position denoted by XV-23424'. The tag does not denote the equipment — it denotes the position."@en ;
           iof-av:firstOrderLogicDefinition "hasTag(x,y) ↔ ∃z(FunctionalLocation(z) ∧ installedAt(x,z) ∧ identifiesLocation(y,z))"@en ;
           iof-av:isPrimitive "false"^^xsd:boolean ;
-          iof-av:maturityLevel iof-av:Provisional ;
+          iof-av:maturity iof-ind:Provisional ;
           iof-av:naturalLanguageDefinition "A derived relation between equipment and an equipment tag such that the equipment is installed at the functional location identified by the tag. This relation is not asserted but entailed through a property chain: equipment is installedAt a FunctionalLocation, and the EquipmentTag identifiesLocation that same FunctionalLocation."@en ,
                                            "Uma relação derivada entre um equipamento e uma tag de equipamento tal que o equipamento está instalado no local de instalação identificado pela tag. Esta relação não é assertada, mas inferida por uma cadeia de propriedades: o equipamento está installedAt um FunctionalLocation, e a EquipmentTag identifiesLocation o mesmo FunctionalLocation."@pt-br ;
           iof-av:semiFormalNaturalLanguageDefinition "if x hasTag y then there exists a FunctionalLocation z such that x installedAt z and y identifiesLocation z"@en .
@@ -152,12 +117,12 @@ fl:hasTag rdf:type owl:ObjectProperty ;
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#hostedBy
 fl:hostedBy rdf:type owl:ObjectProperty ;
             rdfs:domain fl:Sensor ;
-            rdfs:range fl:Equipment ;
+            rdfs:range iof-constr:MaterialArtifact ;
             rdfs:label "hospedado por"@pt-br ,
                        "hosted by"@en ;
             skos:example "Sensor PT-23424 hostedBy Valve XV-22342"@en ;
             iof-av:isPrimitive "true"^^xsd:boolean ;
-            iof-av:maturityLevel iof-av:Provisional ;
+            iof-av:maturity iof-ind:Provisional ;
             iof-av:naturalLanguageDefinition "A relation between a sensor and an equipment item such that the sensor is physically mounted on the equipment item. The sensor has its own functional location but is physically hosted by the equipment."@en ,
                                              "Uma relação entre um sensor e um item de equipamento tal que o sensor está fisicamente montado no item de equipamento. O sensor tem seu próprio local de instalação, mas é fisicamente hospedado pelo equipamento."@pt-br .
 
@@ -172,7 +137,7 @@ fl:identifies rdf:type owl:ObjectProperty ;
                          "identifies"@en ;
               iof-av:firstOrderLogicDefinition "identifies(x,y) → FunctionalLocationCode(x) ∧ FunctionalLocation(y) ∧ denotes(x,y) ∧ ∀z(identifies(x,z) → z = y)"@en ;
               iof-av:isPrimitive "true"^^xsd:boolean ;
-              iof-av:maturityLevel iof-av:Provisional ;
+              iof-av:maturity iof-ind:Provisional ;
               iof-av:naturalLanguageDefinition "A relation between a functional location code and a functional location such that the code uniquely denotes the functional location within the organizational hierarchy following the ISO 14224 coding scheme."@en ,
                                                "Uma relação entre um código de local de instalação e um local de instalação tal que o código denota unicamente o local de instalação dentro da hierarquia organizacional seguindo o esquema de codificação ISO 14224."@pt-br ;
               iof-av:semiFormalNaturalLanguageDefinition "if x identifies y then x is a FunctionalLocationCode and y is a FunctionalLocation and x uniquely denotes y"@en .
@@ -190,7 +155,7 @@ fl:identifiesLocation rdf:type owl:ObjectProperty ;
                                              "DECISÃO DE PROJETO CRÍTICA: A tag de equipamento denota o local de instalação (a posição), NÃO o equipamento físico. A relação entre tag e equipamento é mediada pelo sítio através da cadeia de propriedades hasTag."@pt-br ;
                       iof-av:firstOrderLogicDefinition "identifiesLocation(x,y) → EquipmentTag(x) ∧ FunctionalLocation(y) ∧ denotes(x,y) ∧ ∀z(identifiesLocation(x,z) → z = y)"@en ;
                       iof-av:isPrimitive "true"^^xsd:boolean ;
-                      iof-av:maturityLevel iof-av:Provisional ;
+                      iof-av:maturity iof-ind:Provisional ;
                       iof-av:naturalLanguageDefinition "A relation between an equipment tag and a functional location such that the tag uniquely identifies the functional location where equipment of the designated type is or can be installed. The tag prefix convention encodes the expected equipment type at the position."@en ,
                                                        "Uma relação entre uma tag de equipamento e um local de instalação tal que a tag identifica unicamente o local de instalação onde equipamento do tipo designado está ou pode ser instalado. A convenção de prefixo da tag codifica o tipo esperado de equipamento na posição."@pt-br ;
                       iof-av:semiFormalNaturalLanguageDefinition "if x identifiesLocation y then x is an EquipmentTag and y is a FunctionalLocation and x denotes y"@en .
@@ -205,7 +170,7 @@ fl:indexedBySite rdf:type owl:ObjectProperty ,
                             "indexed by site"@en ;
                  rdfs:seeAlso "CQ2: Temporal continuity across replacements"@en ;
                  iof-av:isPrimitive "true"^^xsd:boolean ;
-                 iof-av:maturityLevel iof-av:Provisional ;
+                 iof-av:maturity iof-ind:Provisional ;
                  iof-av:naturalLanguageDefinition "A relation between a time-stamped measured dataset and a functional location such that the dataset is indexed by the functional location rather than by individual equipment instances, enabling automatic data continuity across equipment replacements."@en ,
                                                   "Uma relação entre um conjunto de dados medidos com carimbo de tempo e um local de instalação tal que o conjunto de dados é indexado pelo local de instalação ao invés de por instâncias individuais de equipamento, permitindo continuidade automática de dados através de substituições de equipamento."@pt-br ;
                  iof-av:usageNote "KEY PATTERN: Enables automatic continuity without application logic to 'stitch' data from different equipment instances."@en .
@@ -214,14 +179,14 @@ fl:indexedBySite rdf:type owl:ObjectProperty ,
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#installedAt
 fl:installedAt rdf:type owl:ObjectProperty ;
                rdfs:subPropertyOf <http://purl.obolibrary.org/obo/BFO_0000171> ;
-               rdfs:domain fl:Equipment ;
+               rdfs:domain iof-constr:MaterialArtifact ;
                rdfs:range fl:FunctionalLocation ;
                rdfs:label "instalado em"@pt-br ,
                           "installed at"@en ;
                skos:example "Sensor_PT23424_v2 installedAt FL_PT23424_Site (2017-06-16 to 2022-03-10)"@en ;
                iof-av:firstOrderLogicDefinition "installedAt(x,y) → Equipment(x) ∧ FunctionalLocation(y) ∧ ∃t(located_in(x,y,t))"@en ;
                iof-av:isPrimitive "true"^^xsd:boolean ;
-               iof-av:maturityLevel iof-av:Provisional ;
+               iof-av:maturity iof-ind:Provisional ;
                iof-av:naturalLanguageDefinition "A relation between a piece of equipment and a functional location such that the equipment is physically installed at the functional location during some temporally bounded period. The temporal bounds are captured via installedDate and removedDate data properties."@en ,
                                                 "Uma relação entre uma peça de equipamento e um local de instalação tal que o equipamento está fisicamente instalado no local de instalação durante algum período temporalmente delimitado. Os limites temporais são capturados pelas propriedades de dados installedDate e removedDate."@pt-br ;
                iof-av:semiFormalNaturalLanguageDefinition "if x installedAt y then x is an Equipment and y is a FunctionalLocation and x is located in y at some time"@en .
@@ -239,7 +204,7 @@ fl:partOfSystemSite rdf:type owl:ObjectProperty ;
                                  "SubsystemSite partOfSystemSite SystemSite"@en ;
                     iof-av:firstOrderLogicDefinition "partOfSystemSite(x,y) → FunctionalLocation(x) ∧ FunctionalLocation(y) ∧ partOf(x,y)"@en ;
                     iof-av:isPrimitive "true"^^xsd:boolean ;
-                    iof-av:maturityLevel iof-av:Provisional ;
+                    iof-av:maturity iof-ind:Provisional ;
                     iof-av:naturalLanguageDefinition "A relation between two functional locations such that the first is a proper part of the second in the ISO 14224 hierarchical decomposition. This relation is transitive, enabling queries across hierarchy levels."@en ,
                                                      "Uma relação entre dois locais de instalação tal que o primeiro é parte própria do segundo na decomposição hierárquica ISO 14224. Esta relação é transitiva, permitindo consultas através dos níveis hierárquicos."@pt-br ;
                     iof-av:semiFormalNaturalLanguageDefinition "if x partOfSystemSite y then x is a FunctionalLocation and y is a FunctionalLocation and x is part of y"@en .
@@ -252,21 +217,11 @@ fl:performedAt rdf:type owl:ObjectProperty ;
                rdfs:label "performed at"@en ,
                           "realizada em"@pt-br ;
                iof-av:isPrimitive "true"^^xsd:boolean ;
-               iof-av:maturityLevel iof-av:Provisional ;
+               iof-av:maturity iof-ind:Provisional ;
                iof-av:naturalLanguageDefinition "A relation between a maintenance note and a functional location such that the maintenance note documents work performed at the functional location."@en ,
                                                 "Uma relação entre uma nota de manutenção e um local de instalação tal que a nota de manutenção documenta trabalho realizado no local de instalação."@pt-br .
 
 
-###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#performedAtLocation
-fl:performedAtLocation rdf:type owl:ObjectProperty ;
-                       rdfs:domain iof-maint:MaintenanceActivity ;
-                       rdfs:range fl:FunctionalLocation ;
-                       rdfs:label "performed at location"@en ,
-                                  "realizada no local de instalação"@pt-br ;
-                       iof-av:isPrimitive "true"^^xsd:boolean ;
-                       iof-av:maturityLevel iof-av:Provisional ;
-                       iof-av:naturalLanguageDefinition "A relation between a maintenance activity (as defined in IOF-Maint) and a functional location such that the maintenance activity is performed at the functional location."@en ,
-                                                        "Uma relação entre uma atividade de manutenção (conforme definida no IOF-Maint) e um local de instalação tal que a atividade de manutenção é realizada no local de instalação."@pt-br .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#requiresFunction
@@ -276,7 +231,7 @@ fl:requiresFunction rdf:type owl:ObjectProperty ;
                     rdfs:label "requer função"@pt-br ,
                                "requires function"@en ;
                     iof-av:isPrimitive "true"^^xsd:boolean ;
-                    iof-av:maturityLevel iof-av:Provisional ;
+                    iof-av:maturity iof-ind:Provisional ;
                     iof-av:naturalLanguageDefinition "A relation between a functional location specification and a BFO function such that the specification prescribes that the function must be realized by equipment installed at the associated functional location."@en ,
                                                      "Uma relação entre uma especificação de local de instalação e uma função BFO tal que a especificação prescreve que a função deve ser realizada pelo equipamento instalado no local de instalação associado."@pt-br .
 
@@ -288,7 +243,7 @@ fl:requiresRole rdf:type owl:ObjectProperty ;
                 rdfs:label "requer papel"@pt-br ,
                            "requires role"@en ;
                 iof-av:isPrimitive "true"^^xsd:boolean ;
-                iof-av:maturityLevel iof-av:Provisional ;
+                iof-av:maturity iof-ind:Provisional ;
                 iof-av:naturalLanguageDefinition "A relation between a functional location and a required role such that equipment installed at the functional location must bear the specified role."@en ,
                                                  "Uma relação entre um local de instalação e um papel requerido tal que o equipamento instalado no local de instalação deve portar o papel especificado."@pt-br .
 
@@ -300,7 +255,7 @@ fl:specifiesLocation rdf:type owl:ObjectProperty ;
                      rdfs:label "especifica local de instalação"@pt-br ,
                                 "specifies location"@en ;
                      iof-av:isPrimitive "true"^^xsd:boolean ;
-                     iof-av:maturityLevel iof-av:Provisional ;
+                     iof-av:maturity iof-ind:Provisional ;
                      iof-av:naturalLanguageDefinition "A relation between a functional location specification and a functional location such that the specification prescribes the required function and technical constraints at the functional location."@en ,
                                                       "Uma relação entre uma especificação de local de instalação e um local de instalação tal que a especificação prescreve a função requerida e as restrições técnicas no local de instalação."@pt-br .
 
@@ -316,7 +271,7 @@ fl:hasCoordinateX rdf:type owl:DatatypeProperty ,
                   rdfs:range xsd:double ;
                   rdfs:label "has coordinate X"@en ,
                              "tem coordenada X"@pt-br ;
-                  iof-av:maturityLevel iof-av:Provisional ;
+                  iof-av:maturity iof-ind:Provisional ;
                   iof-av:naturalLanguageDefinition "The X coordinate of a functional location relative to a material reference frame."@en .
 
 
@@ -327,7 +282,7 @@ fl:hasCoordinateY rdf:type owl:DatatypeProperty ,
                   rdfs:range xsd:double ;
                   rdfs:label "has coordinate Y"@en ,
                              "tem coordenada Y"@pt-br ;
-                  iof-av:maturityLevel iof-av:Provisional ;
+                  iof-av:maturity iof-ind:Provisional ;
                   iof-av:naturalLanguageDefinition "The Y coordinate of a functional location relative to a material reference frame."@en .
 
 
@@ -339,7 +294,7 @@ fl:hasCoordinateZ rdf:type owl:DatatypeProperty ,
                   rdfs:label "has coordinate Z"@en ,
                              "tem coordenada Z"@pt-br ;
                   skos:example "Z: +12.6m (Deck C level on platform P-74)"@en ;
-                  iof-av:maturityLevel iof-av:Provisional ;
+                  iof-av:maturity iof-ind:Provisional ;
                   iof-av:naturalLanguageDefinition "The Z coordinate (elevation) of a functional location relative to a material reference frame."@en .
 
 
@@ -350,18 +305,18 @@ fl:hasSeriesLabel rdf:type owl:DatatypeProperty ,
                   rdfs:range xsd:string ;
                   rdfs:label "has series label"@en ,
                              "tem rótulo da série"@pt-br ;
-                  iof-av:maturityLevel iof-av:Provisional ;
+                  iof-av:maturity iof-ind:Provisional ;
                   iof-av:naturalLanguageDefinition "A user-facing label for a time series dataset."@en .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#installedDate
 fl:installedDate rdf:type owl:DatatypeProperty ,
                           owl:FunctionalProperty ;
-                 rdfs:domain fl:Equipment ;
+                 rdfs:domain iof-constr:MaterialArtifact ;
                  rdfs:range xsd:dateTime ;
                  rdfs:label "data de instalação"@pt-br ,
                             "installed date"@en ;
-                 iof-av:maturityLevel iof-av:Provisional ;
+                 iof-av:maturity iof-ind:Provisional ;
                  iof-av:naturalLanguageDefinition "O carimbo de tempo de quando o equipamento foi instalado em um local de instalação."@pt-br ,
                                                   "The timestamp when equipment was installed at a functional location."@en .
 
@@ -372,7 +327,7 @@ fl:noteText rdf:type owl:DatatypeProperty ;
             rdfs:range xsd:string ;
             rdfs:label "note text"@en ,
                        "texto da nota"@pt-br ;
-            iof-av:maturityLevel iof-av:Provisional .
+            iof-av:maturity iof-ind:Provisional .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#noteTimestamp
@@ -382,17 +337,17 @@ fl:noteTimestamp rdf:type owl:DatatypeProperty ,
                  rdfs:range xsd:dateTime ;
                  rdfs:label "carimbo de tempo da nota"@pt-br ,
                             "note timestamp"@en ;
-                 iof-av:maturityLevel iof-av:Provisional .
+                 iof-av:maturity iof-ind:Provisional .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#removedDate
 fl:removedDate rdf:type owl:DatatypeProperty ,
                         owl:FunctionalProperty ;
-               rdfs:domain fl:Equipment ;
+               rdfs:domain iof-constr:MaterialArtifact ;
                rdfs:range xsd:dateTime ;
                rdfs:label "data de remoção"@pt-br ,
                           "removed date"@en ;
-               iof-av:maturityLevel iof-av:Provisional ;
+               iof-av:maturity iof-ind:Provisional ;
                iof-av:naturalLanguageDefinition "O carimbo de tempo de quando o equipamento foi removido de um local de instalação. A ausência indica que o equipamento está atualmente instalado."@pt-br ,
                                                 "The timestamp when equipment was removed from a functional location. Absence indicates equipment is currently installed."@en .
 
@@ -404,7 +359,7 @@ fl:storedAt rdf:type owl:DatatypeProperty ,
             rdfs:range xsd:anyURI ;
             rdfs:label "armazenado em"@pt-br ,
                        "stored at"@en ;
-            iof-av:maturityLevel iof-av:Provisional ;
+            iof-av:maturity iof-ind:Provisional ;
             iof-av:naturalLanguageDefinition "The URI of the storage system where time series data is physically stored."@en .
 
 
@@ -412,52 +367,7 @@ fl:storedAt rdf:type owl:DatatypeProperty ,
 #    Classes
 #################################################################
 
-###  https://spec.industrialontologies.org/ontology/maintenance/Maintenance/DegradedState
-iof-maint:DegradedState rdf:type owl:Class .
 
-
-###  https://spec.industrialontologies.org/ontology/maintenance/Maintenance/FailedState
-iof-maint:FailedState rdf:type owl:Class .
-
-
-###  https://spec.industrialontologies.org/ontology/maintenance/Maintenance/MaintainableMaterialItem
-iof-maint:MaintainableMaterialItem rdf:type owl:Class .
-
-
-###  https://spec.industrialontologies.org/ontology/maintenance/Maintenance/MaintenanceActivity
-iof-maint:MaintenanceActivity rdf:type owl:Class .
-
-
-###  https://spec.industrialontologies.org/ontology/maintenance/Maintenance/OperatingState
-iof-maint:OperatingState rdf:type owl:Class .
-
-
-###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#Equipment
-fl:Equipment rdf:type owl:Class ;
-             rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000030> ,
-                             iof-maint:MaintainableMaterialItem ,
-                             [ rdf:type owl:Restriction ;
-                               owl:onProperty fl:installedAt ;
-                               owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                               owl:onClass fl:FunctionalLocation
-                             ] ;
-             owl:disjointWith fl:FunctionalLocation ;
-             rdfs:label "Equipamento"@pt-br ,
-                        "Equipment"@en ;
-             skos:example "Instância de sensor Sensor_PT23424_v1 (2015-2017)"@pt-br ,
-                          "Sensor instance Sensor_PT23424_v1 (2015-2017)"@en ;
-             skos:prefLabel "Equipamento"@pt-br ,
-                            "Equipment"@en ;
-             iof-av:explanatoryNote "Equipamento é disjunto de Local de Instalação: uma peça de equipamento nunca é uma posição, e uma posição nunca é uma peça de equipamento. O mesmo local de instalação pode abrigar diferentes instâncias de equipamento ao longo do tempo."@pt-br ,
-                                    "Equipment is disjoint with FunctionalLocation: a piece of equipment is never a position, and a position is never a piece of equipment. The same functional location may host different equipment instances over time."@en ;
-             iof-av:firstOrderLogicDefinition "Equipment(x) → MaterialEntity(x) ∧ MaintainableMaterialItem(x) ∧ ¬FunctionalLocation(x)"@en ;
-             iof-av:isPrimitive "true"^^xsd:boolean ;
-             iof-av:maturityLevel iof-av:Provisional ;
-             iof-av:naturalLanguageDefinition "An equipment is a material entity that is a maintainable material item that can be installed at a functional location to realize the function required at that location, and that is transient — manufactured, installed, maintained, and eventually decommissioned."@en ,
-                                              "Um equipamento é uma entidade material que é um item material manutenível que pode ser instalado em um local de instalação para realizar a função requerida naquele local, e que é transitório — fabricado, instalado, mantido e eventualmente descomissionado."@pt-br ;
-             iof-av:semiFormalNaturalLanguageDefinition "every instance of Equipment is an instance of MaterialEntity and an instance of MaintainableMaterialItem that is disjoint from FunctionalLocation"@en ;
-             iof-av:synonym "Peça de Equipamento"@pt-br ,
-                            "Piece of Equipment"@en .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#EquipmentTag
@@ -482,7 +392,7 @@ fl:EquipmentTag rdf:type owl:Class ;
                                        "Tag prefix conventions: XV = control valve, PSV = pressure safety valve, PT = pressure transmitter, FT = flow transmitter, LV = level valve. These are conventionalized summaries of the specification's functional classification but do not replace the specification."@en ;
                 iof-av:firstOrderLogicDefinition "EquipmentTag(x) → Identifier(x) ∧ ∃!y(FunctionalLocation(y) ∧ identifiesLocation(x,y)) ∧ ¬FunctionalLocationCode(x)"@en ;
                 iof-av:isPrimitive "true"^^xsd:boolean ;
-                iof-av:maturityLevel iof-av:Provisional ;
+                iof-av:maturity iof-ind:Provisional ;
                 iof-av:naturalLanguageDefinition "An equipment tag is an identifier that denotes a functional location through industrial naming conventions, where the tag prefix encodes the expected equipment type at the position. The tag does not denote the physical equipment — the relationship between tag and equipment is mediated through the functional location."@en ,
                                                  "Uma tag de equipamento é um identificador que denota um local de instalação através de convenções industriais de nomenclatura, onde o prefixo da tag codifica o tipo esperado de equipamento na posição. A tag não denota o equipamento físico — a relação entre tag e equipamento é mediada pelo local de instalação."@pt-br ;
                 iof-av:semiFormalNaturalLanguageDefinition "every instance of EquipmentTag is an instance of iao:Identifier that identifiesLocation exactly one FunctionalLocation and that is disjoint from FunctionalLocationCode"@en ;
@@ -501,7 +411,7 @@ fl:EquipmentUnitSite rdf:type owl:Class ;
                                 "Sítio da Unidade de Equipamento"@pt-br ;
                      iof-av:adaptedFrom "ISO 14224:2016 Level 4: Equipment Unit"@en ;
                      iof-av:isPrimitive "true"^^xsd:boolean ;
-                     iof-av:maturityLevel iof-av:Provisional ;
+                     iof-av:maturity iof-ind:Provisional ;
                      iof-av:naturalLanguageDefinition "An equipment unit site is a functional location that represents a unit within a subsystem in the ISO 14224 hierarchy."@en ,
                                                       "Um sítio da unidade de equipamento é um local de instalação que representa uma unidade dentro de um subsistema na hierarquia ISO 14224."@pt-br .
 
@@ -512,7 +422,7 @@ fl:FlowRegulationFunction rdf:type owl:Class ;
                           rdfs:label "Flow Regulation Function"@en ,
                                      "Função de Regulação de Fluxo"@pt-br ;
                           iof-av:isPrimitive "true"^^xsd:boolean ;
-                          iof-av:maturityLevel iof-av:Provisional ;
+                          iof-av:maturity iof-ind:Provisional ;
                           iof-av:naturalLanguageDefinition "A flow regulation function is a BFO function that is realized in a process of controlling the rate, direction, or pressure of fluid flow through a piping system by varying the resistance to flow."@en ,
                                                            "Uma função de regulação de fluxo é uma função BFO que é realizada em um processo de controlar a vazão, direção ou pressão do fluxo de fluido através de um sistema de tubulação variando a resistência ao fluxo."@pt-br .
 
@@ -522,7 +432,7 @@ fl:FunctionalLocation rdf:type owl:Class ;
                       rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000029> ,
                                       [ rdf:type owl:Restriction ;
                                         owl:onProperty fl:hasBoundaryDeterminedBy ;
-                                        owl:someValuesFrom <http://purl.obolibrary.org/obo/BFO_0000030>
+                                        owl:someValuesFrom <http://purl.obolibrary.org/obo/BFO_0000040>
                                       ] ;
                       rdfs:label "Functional Location"@en ,
                                  "Local de Instalação"@pt-br ;
@@ -540,7 +450,7 @@ fl:FunctionalLocation rdf:type owl:Class ;
                                              "The choice of bfo:Site as the grounding category results from a systematic elimination of alternatives: MaterialEntity fails persistence when empty, Role fails persistence (requires bearer), InformationContentEntity fails spatial queries, SpatialRegion fails relativity to plant structure. Only Site satisfies all requirements simultaneously."@en ;
                       iof-av:firstOrderLogicDefinition "FunctionalLocation(x) → Site(x) ∧ ∃y(MaterialEntity(y) ∧ hasBoundaryDeterminedBy(x,y)) ∧ ¬Equipment(x)"@en ;
                       iof-av:isPrimitive "true"^^xsd:boolean ;
-                      iof-av:maturityLevel iof-av:Provisional ;
+                      iof-av:maturity iof-ind:Provisional ;
                       iof-av:naturalLanguageDefinition "A functional location is a site that is a persistent spatial position in an industrial facility hierarchy where a maintainable item is or can be installed, and whose boundaries are determined in relation to delimiting material structures rather than by the equipment that may occupy it."@en ,
                                                        "Um local de instalação é um sítio que é uma posição espacial persistente em uma hierarquia de instalação industrial onde um item manutenível está ou pode ser instalado, e cujos limites são determinados em relação a estruturas materiais delimitadoras e não pelo equipamento que possa ocupá-lo."@pt-br ;
                       iof-av:semiFormalNaturalLanguageDefinition "every instance of FunctionalLocation is an instance of bfo:Site that (1) has its boundaries determined by some MaterialEntity, (2) persists independently of whether any Equipment is installed at it, and (3) participates in an ISO 14224 hierarchical decomposition via partOfSystemSite"@en ;
@@ -572,7 +482,7 @@ fl:FunctionalLocationCode rdf:type owl:Class ;
                                                  "Distinto da Tag de Equipamento: o código LI codifica a hierarquia organizacional (ONDE na estrutura), enquanto a tag de equipamento codifica a designação funcional (QUE tipo de equipamento é esperado). Ambos denotam o mesmo local de instalação."@pt-br ;
                           iof-av:firstOrderLogicDefinition "FunctionalLocationCode(x) → Identifier(x) ∧ ∃!y(FunctionalLocation(y) ∧ identifies(x,y)) ∧ ¬EquipmentTag(x)"@en ;
                           iof-av:isPrimitive "true"^^xsd:boolean ;
-                          iof-av:maturityLevel iof-av:Provisional ;
+                          iof-av:maturity iof-ind:Provisional ;
                           iof-av:naturalLanguageDefinition "A functional location code is an identifier that denotes a functional location by encoding the position's place in the ISO 14224 organizational hierarchy, with segments representing plant, system, subsystem, equipment unit, and maintainable item levels."@en ,
                                                            "Um código de local de instalação é um identificador que denota um local de instalação codificando a posição do local na hierarquia organizacional ISO 14224, com segmentos representando os níveis de planta, sistema, subsistema, unidade de equipamento e item manutenível."@pt-br ;
                           iof-av:semiFormalNaturalLanguageDefinition "every instance of FunctionalLocationCode is an instance of iao:Identifier that identifies exactly one FunctionalLocation and that is disjoint from EquipmentTag"@en .
@@ -595,7 +505,7 @@ fl:FunctionalLocationSpecification rdf:type owl:Class ;
                                                           "Related to but distinct from EquipmentTag: two positions may share the same tag prefix (e.g., both XV-) while having different specifications (one rated for 150 bar, another for 300 bar). Corresponds to IDO lis:Specified in the IDO mapping."@en ;
                                    iof-av:firstOrderLogicDefinition "FunctionalLocationSpecification(x) → DirectiveInformationEntity(x) ∧ ∃y(FunctionalLocation(y) ∧ specifiesLocation(x,y)) ∧ ∃z(Function(z) ∧ requiresFunction(x,z))"@en ;
                                    iof-av:isPrimitive "false"^^xsd:boolean ;
-                                   iof-av:maturityLevel iof-av:Provisional ;
+                                   iof-av:maturity iof-ind:Provisional ;
                                    iof-av:naturalLanguageDefinition "A functional location specification is a directive information entity that prescribes the required function and technical constraints (such as pressure ratings, material requirements, and interface dimensions) at a functional location. Specifications persist independently of installed equipment and may evolve over the plant lifecycle."@en ,
                                                                     "Uma especificação de local de instalação é uma entidade informacional diretiva que prescreve a função requerida e as restrições técnicas (tais como classificações de pressão, requisitos de material e dimensões de interface) em um local de instalação. Especificações persistem independentemente do equipamento instalado e podem evoluir ao longo do ciclo de vida da planta."@pt-br ;
                                    iof-av:semiFormalNaturalLanguageDefinition "every instance of FunctionalLocationSpecification is an instance of iao:DirectiveInformationEntity that specifiesLocation some FunctionalLocation and requiresFunction some bfo:Function"@en ;
@@ -609,7 +519,7 @@ fl:GasLiquidSeparationFunction rdf:type owl:Class ;
                                rdfs:label "Função de Separação Gás-Líquido"@pt-br ,
                                           "Gas-Liquid Separation Function"@en ;
                                iof-av:isPrimitive "true"^^xsd:boolean ;
-                               iof-av:maturityLevel iof-av:Provisional ;
+                               iof-av:maturity iof-ind:Provisional ;
                                iof-av:naturalLanguageDefinition "A gas-liquid separation function is a separation function that is realized in a process whereby a multiphase mixture is divided into a gas phase stream and a liquid phase stream based on differences in density."@en ,
                                                                 "Uma função de separação gás-líquido é uma função de separação que é realizada em um processo pelo qual uma mistura multifásica é dividida em um fluxo de fase gasosa e um fluxo de fase líquida com base em diferenças de densidade."@pt-br .
 
@@ -627,7 +537,7 @@ fl:GasLiquidSeparator rdf:type owl:Class ;
                                    "Vaso separador de produção na unidade de desidratação de gás"@pt-br ;
                       iof-av:firstOrderLogicDefinition "GasLiquidSeparator(x) → SeparationEquipment(x) ∧ ∃f(GasLiquidSeparationFunction(f) ∧ bears(x,f))"@en ;
                       iof-av:isPrimitive "true"^^xsd:boolean ;
-                      iof-av:maturityLevel iof-av:Provisional ;
+                      iof-av:maturity iof-ind:Provisional ;
                       iof-av:naturalLanguageDefinition "A gas-liquid separator is a separation equipment that bears a gas-liquid separation function, i.e., it is designed to separate a multiphase mixture into distinct gas and liquid phase streams."@en ,
                                                        "Um separador gás-líquido é um equipamento de separação que porta uma função de separação gás-líquido, ou seja, é projetado para separar uma mistura multifásica em fluxos distintos de fase gasosa e líquida."@pt-br ;
                       iof-av:semiFormalNaturalLanguageDefinition "every instance of GasLiquidSeparator is an instance of SeparationEquipment that bears some GasLiquidSeparationFunction"@en .
@@ -646,7 +556,7 @@ fl:MaintainableItemSite rdf:type owl:Class ;
                                      "Sítio para o sensor individual PT-23424"@pt-br ;
                         iof-av:adaptedFrom "ISO 14224:2016 Level 5: Maintainable Item"@en ;
                         iof-av:isPrimitive "true"^^xsd:boolean ;
-                        iof-av:maturityLevel iof-av:Provisional ;
+                        iof-av:maturity iof-ind:Provisional ;
                         iof-av:naturalLanguageDefinition "A maintainable item site is a functional location that is the lowest level in the ISO 14224 hierarchy where a single maintainable item is or can be installed."@en ,
                                                          "Um sítio do item manutenível é um local de instalação que é o nível mais baixo na hierarquia ISO 14224 onde um único item manutenível está ou pode ser instalado."@pt-br .
 
@@ -657,7 +567,7 @@ fl:MaintenanceNote rdf:type owl:Class ;
                    rdfs:label "Maintenance Note"@en ,
                               "Nota de Manutenção"@pt-br ;
                    iof-av:isPrimitive "true"^^xsd:boolean ;
-                   iof-av:maturityLevel iof-av:Provisional ;
+                   iof-av:maturity iof-ind:Provisional ;
                    iof-av:naturalLanguageDefinition "A maintenance note is a data item that is a textual record created during maintenance work, anchored to a functional location rather than to equipment for persistence across replacements."@en ,
                                                     "Uma nota de manutenção é um item de dado que é um registro textual criado durante trabalho de manutenção, ancorado a um local de instalação ao invés de ao equipamento para persistência através de substituições."@pt-br .
 
@@ -671,7 +581,7 @@ fl:PlantSite rdf:type owl:Class ;
                           "Plataforma offshore P-74"@pt-br ;
              iof-av:adaptedFrom "ISO 14224:2016 Level 1: Plant"@en ;
              iof-av:isPrimitive "true"^^xsd:boolean ;
-             iof-av:maturityLevel iof-av:Provisional ;
+             iof-av:maturity iof-ind:Provisional ;
              iof-av:naturalLanguageDefinition "A plant site is a functional location that is the highest level in the ISO 14224 hierarchy, representing an entire industrial plant or facility."@en ,
                                               "Um sítio da planta é um local de instalação que é o nível mais alto na hierarquia ISO 14224, representando uma planta ou instalação industrial inteira."@pt-br .
 
@@ -682,7 +592,7 @@ fl:PressureSensingFunction rdf:type owl:Class ;
                            rdfs:label "Função de Medição de Pressão"@pt-br ,
                                       "Pressure Sensing Function"@en ;
                            iof-av:isPrimitive "true"^^xsd:boolean ;
-                           iof-av:maturityLevel iof-av:Provisional ;
+                           iof-av:maturity iof-ind:Provisional ;
                            iof-av:naturalLanguageDefinition "A pressure sensing function is a BFO function that is realized in a process of measuring the pressure of a fluid or gas within a system and producing a signal proportional to the measured pressure."@en ,
                                                             "Uma função de medição de pressão é uma função BFO que é realizada em um processo de medir a pressão de um fluido ou gás dentro de um sistema e produzir um sinal proporcional à pressão medida."@pt-br .
 
@@ -695,27 +605,27 @@ fl:RequiredRole rdf:type owl:Class ;
                 skos:example "Papel de estrangulamento variável, papel de controle de alta pressão"@pt-br ,
                              "Variable choking role, high-pressure control role"@en ;
                 iof-av:isPrimitive "true"^^xsd:boolean ;
-                iof-av:maturityLevel iof-av:Provisional ;
+                iof-av:maturity iof-ind:Provisional ;
                 iof-av:naturalLanguageDefinition "A required role is a BFO role that specifies the functional requirements for equipment at a functional location."@en ,
                                                  "Um papel requerido é um papel BFO que especifica os requisitos funcionais para equipamento em um local de instalação."@pt-br .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#Sensor
 fl:Sensor rdf:type owl:Class ;
-          rdfs:subClassOf fl:Equipment ;
+          rdfs:subClassOf iof-constr:MaterialArtifact ;
           rdfs:label "Sensor"@en ,
                      "Sensor"@pt-br ;
           skos:example "Pressure sensor installed at position PT-23424"@en ,
                        "Sensor de pressão instalado na posição PT-23424"@pt-br ;
           iof-av:isPrimitive "true"^^xsd:boolean ;
-          iof-av:maturityLevel iof-av:Provisional ;
+          iof-av:maturity iof-ind:Provisional ;
           iof-av:naturalLanguageDefinition "A sensor is an equipment item that measures physical properties such as pressure, temperature, or flow."@en ,
                                            "Um sensor é um item de equipamento que mede propriedades físicas tais como pressão, temperatura ou vazão."@pt-br .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#SeparationEquipment
 fl:SeparationEquipment rdf:type owl:Class ;
-                       rdfs:subClassOf fl:Equipment ,
+                       rdfs:subClassOf iof-constr:MaterialArtifact ,
                                        [ rdf:type owl:Restriction ;
                                          owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000196> ;
                                          owl:someValuesFrom fl:SeparationFunction
@@ -726,7 +636,7 @@ fl:SeparationEquipment rdf:type owl:Class ;
                                               "Modeled as a universal (primitive class with necessary conditions), not a defined class. Instances are asserted as SeparationEquipment, not inferred from function alone. This follows the COPPP approach where equipment type universals carry necessary axioms but classification requires domain expert assertion."@en ;
                        iof-av:firstOrderLogicDefinition "SeparationEquipment(x) → Equipment(x) ∧ ∃f(SeparationFunction(f) ∧ bears(x,f))"@en ;
                        iof-av:isPrimitive "true"^^xsd:boolean ;
-                       iof-av:maturityLevel iof-av:Provisional ;
+                       iof-av:maturity iof-ind:Provisional ;
                        iof-av:naturalLanguageDefinition "A separation equipment is an equipment item that bears a separation function, i.e., it is designed to divide a mixture into two or more distinct output streams."@en ,
                                                         "Um equipamento de separação é um item de equipamento que porta uma função de separação, ou seja, é projetado para dividir uma mistura em dois ou mais fluxos de saída distintos."@pt-br ;
                        iof-av:semiFormalNaturalLanguageDefinition "every instance of SeparationEquipment is an instance of Equipment that bears some SeparationFunction"@en .
@@ -738,7 +648,7 @@ fl:SeparationFunction rdf:type owl:Class ;
                       rdfs:label "Função de Separação"@pt-br ,
                                  "Separation Function"@en ;
                       iof-av:isPrimitive "true"^^xsd:boolean ;
-                      iof-av:maturityLevel iof-av:Provisional ;
+                      iof-av:maturity iof-ind:Provisional ;
                       iof-av:naturalLanguageDefinition "A separation function is a BFO function that is realized in a process whereby a mixture is divided into two or more distinct output streams based on differences in physical or chemical properties of the constituents."@en ,
                                                        "Uma função de separação é uma função BFO que é realizada em um processo pelo qual uma mistura é dividida em dois ou mais fluxos de saída distintos com base em diferenças nas propriedades físicas ou químicas dos constituintes."@pt-br .
 
@@ -755,7 +665,7 @@ fl:SubsystemSite rdf:type owl:Class ;
                  skos:example "Inlet Separator subsystem site within Gas Dehydration System"@en ;
                  iof-av:adaptedFrom "ISO 14224:2016 Level 3: Subsystem"@en ;
                  iof-av:isPrimitive "true"^^xsd:boolean ;
-                 iof-av:maturityLevel iof-av:Provisional ;
+                 iof-av:maturity iof-ind:Provisional ;
                  iof-av:naturalLanguageDefinition "A subsystem site is a functional location that represents a subsystem within a system in the ISO 14224 hierarchy."@en ,
                                                   "Um sítio do subsistema é um local de instalação que representa um subsistema dentro de um sistema na hierarquia ISO 14224."@pt-br .
 
@@ -773,7 +683,7 @@ fl:SystemSite rdf:type owl:Class ;
                            "Sítio do Sistema de Desidratação de Gás dentro da plataforma P-74"@pt-br ;
               iof-av:adaptedFrom "ISO 14224:2016 Level 2: System"@en ;
               iof-av:isPrimitive "true"^^xsd:boolean ;
-              iof-av:maturityLevel iof-av:Provisional ;
+              iof-av:maturity iof-ind:Provisional ;
               iof-av:naturalLanguageDefinition "A system site is a functional location that represents a major system within a plant in the ISO 14224 hierarchy."@en ,
                                                "Um sítio do sistema é um local de instalação que representa um sistema principal dentro de uma planta na hierarquia ISO 14224."@pt-br .
 
@@ -785,20 +695,20 @@ fl:TimeStampedMeasuredDataset rdf:type owl:Class ;
                                          "Time-Stamped Measured Dataset"@en ;
                               rdfs:seeAlso "CQ2: Temporal continuity across equipment replacements"@en ;
                               iof-av:isPrimitive "true"^^xsd:boolean ;
-                              iof-av:maturityLevel iof-av:Provisional ;
+                              iof-av:maturity iof-ind:Provisional ;
                               iof-av:naturalLanguageDefinition "A time-stamped measured dataset is a data item that contains time-series observations indexed by a functional location for persistent data anchoring across equipment replacements."@en ,
                                                                "Um conjunto de dados medidos com carimbo de tempo é um item de dado que contém observações de séries temporais indexadas por um local de instalação para ancoragem persistente de dados através de substituições de equipamento."@pt-br .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#Valve
 fl:Valve rdf:type owl:Class ;
-         rdfs:subClassOf fl:Equipment ;
+         rdfs:subClassOf iof-constr:MaterialArtifact ;
          rdfs:label "Valve"@en ,
                     "Válvula"@pt-br ;
          skos:example "Block valve installed at position XV-23423"@en ,
                       "Válvula de bloqueio instalada na posição XV-23423"@pt-br ;
          iof-av:isPrimitive "true"^^xsd:boolean ;
-         iof-av:maturityLevel iof-av:Provisional ;
+         iof-av:maturity iof-ind:Provisional ;
          iof-av:naturalLanguageDefinition "A valve is an equipment item that controls fluid flow in piping systems."@en ,
                                           "Uma válvula é um item de equipamento que controla o fluxo de fluido em sistemas de tubulação."@pt-br .
 
@@ -808,11 +718,11 @@ fl:Valve rdf:type owl:Class ;
 #################################################################
 
 ###  https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/Provisional
-iof-av:Provisional rdf:type owl:NamedIndividual .
+iof-ind:Provisional rdf:type owl:NamedIndividual .
 
 
 ###  https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/Released
-iof-av:Released rdf:type owl:NamedIndividual .
+iof-ind:Released rdf:type owl:NamedIndividual .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#Code_PT23424
@@ -827,7 +737,7 @@ fl:Code_PT23424 rdf:type owl:NamedIndividual ,
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#FL_PT23424_Site
 fl:FL_PT23424_Site rdf:type owl:NamedIndividual ,
                             fl:MaintainableItemSite ;
-                   fl:partOfSystemSite fl:InletSeparator_Site ;
+                   fl:partOfSystemSite fl:FL_V23401_Site ;
                    fl:hasCoordinateX "145.4"^^xsd:double ;
                    fl:hasCoordinateY "67.8"^^xsd:double ;
                    fl:hasCoordinateZ "12.6"^^xsd:double ;
@@ -942,14 +852,6 @@ fl:WorkOrder_2023_05_15 rdf:type owl:NamedIndividual ,
 #################################################################
 
 [ rdf:type owl:AllDisjointClasses ;
-  owl:members ( iof-maint:DegradedState
-                iof-maint:FailedState
-                iof-maint:OperatingState
-              )
-] .
-
-
-[ rdf:type owl:AllDisjointClasses ;
   owl:members ( fl:EquipmentUnitSite
                 fl:MaintainableItemSite
                 fl:PlantSite
@@ -957,6 +859,161 @@ fl:WorkOrder_2023_05_15 rdf:type owl:NamedIndividual ,
                 fl:SystemSite
               )
 ] .
+
+###  #GasLiquidSeparationFunction_1
+fl:GasLiquidSeparationFunction_1 rdf:type owl:NamedIndividual ,
+                                          fl:GasLiquidSeparationFunction ;
+                                 rdfs:comment "Function required by the specification of the inlet separator position."@en ,
+                                              "Função requerida pela especificação da posição do separador de entrada."@pt-br ;
+                                 rdfs:label "Gas-Liquid Separation Function (V-23401)"@en .
+
+
+###  #GasLiquidSeparationFunction_2
+fl:GasLiquidSeparationFunction_2 rdf:type owl:NamedIndividual ,
+                                          fl:GasLiquidSeparationFunction ;
+                                 rdfs:comment "Function borne by the separator vessel currently installed at FL_V23401_Site."@en ,
+                                              "Função portada pelo vaso separador atualmente instalado em FL_V23401_Site."@pt-br ;
+                                 rdfs:label "Gas-Liquid Separation Function of Separator_V23401_v1"@en .
+
+
+###  #FL_V23401_Site
+fl:FL_V23401_Site rdf:type owl:NamedIndividual ,
+                           fl:EquipmentUnitSite ;
+                  fl:partOfSystemSite fl:InletSeparator_Site ;
+                  fl:hasCoordinateX "144.8"^^xsd:double ;
+                  fl:hasCoordinateY "66.5"^^xsd:double ;
+                  fl:hasCoordinateZ "8.0"^^xsd:double ;
+                  rdfs:comment "Equipment-unit-level functional location for the inlet separator vessel. Instantiates the ISO 14224 level 4 site class, completing the five-level hierarchy in the dataset."@en ,
+                               "Local de instalação de nível de unidade de equipamento para o vaso separador de entrada. Instancia a classe de sítio do nível 4 da ISO 14224, completando a hierarquia de cinco níveis no conjunto de dados."@pt-br ;
+                  rdfs:label "Functional Location for V-23401"@en ,
+                             "Local de Instalação para V-23401"@pt-br .
+
+
+###  #Code_V23401
+fl:Code_V23401 rdf:type owl:NamedIndividual ,
+                        fl:FunctionalLocationCode ;
+               fl:identifies fl:FL_V23401_Site ;
+               rdfs:comment "Functional location code for the inlet separator position (equipment unit level)."@en ;
+               rdfs:label "30234.FSFS.FWSF.10.02"@en .
+
+
+###  #Tag_V23401
+fl:Tag_V23401 rdf:type owl:NamedIndividual ,
+                       fl:EquipmentTag ;
+              fl:identifiesLocation fl:FL_V23401_Site ;
+              rdfs:comment "Equipment tag denoting the separator position. V prefix encodes pressure vessel. Does NOT denote any specific vessel instance."@en ;
+              rdfs:label "V-23401"@en .
+
+
+###  #Spec_V23401
+fl:Spec_V23401 rdf:type owl:NamedIndividual ,
+                        fl:FunctionalLocationSpecification ;
+               fl:specifiesLocation fl:FL_V23401_Site ;
+               fl:requiresFunction fl:GasLiquidSeparationFunction_1 ;
+               rdfs:comment "Requires gas-liquid separation function; design pressure 90 bar; two-phase horizontal vessel."@en ,
+                            "Requer função de separação gás-líquido; pressão de projeto 90 bar; vaso horizontal bifásico."@pt-br ;
+               rdfs:label "Specification for V-23401"@en ,
+                          "Especificação para V-23401"@pt-br .
+
+
+###  #Separator_V23401_v1
+fl:Separator_V23401_v1 rdf:type owl:NamedIndividual ,
+                                fl:GasLiquidSeparator ;
+                       fl:installedAt fl:FL_V23401_Site ;
+                       fl:installedDate "2015-01-01T00:00:00"^^xsd:dateTime ;
+                       <http://purl.obolibrary.org/obo/BFO_0000196> fl:GasLiquidSeparationFunction_2 ;
+                       rdfs:comment "Currently installed (no removal date). Asserted as GasLiquidSeparator (primitive universal, COPPP-style); subsumption entails SeparationEquipment (and iof-constr:MaterialArtifact), supporting CQ6 retrieval. Bears a gas-liquid separation function matching the function required by Spec_V23401 — the prescriptive-realized correspondence queried in CQ6."@en ;
+                       rdfs:label "Separator V-23401 v1"@en .
+
+# ----------------------------------------------------------------------------
+# CQ4 (verbatim): functional locations requiring gas-liquid separation
+#
+# SELECT ?loc WHERE {
+#   ?spec a fl:FunctionalLocationSpecification ;
+#         fl:specifiesLocation ?loc ;
+#         fl:requiresFunction ?f .
+#   ?f a fl:GasLiquidSeparationFunction .
+# }
+#
+# CQ6 (verbatim): separation equipment + locations whose specs require its
+# function kind (prescriptive-realized join; SeparationEquipment instances
+# retrieved by subsumption from asserted GasLiquidSeparator typing)
+#
+# SELECT ?eq ?loc WHERE {
+#   ?eq a fl:SeparationEquipment ;
+#       <http://purl.obolibrary.org/obo/BFO_0000196> ?bf ;
+#       fl:installedAt ?loc .
+#   ?bf a ?fkind . ?fkind rdfs:subClassOf* fl:SeparationFunction .
+#   ?spec fl:specifiesLocation ?loc ;
+#         fl:requiresFunction ?rf .
+#   ?rf a ?fkind .
+# }
+# ----------------------------------------------------------------------------
+
+#################################################################
+#    Camera-ready additions (FOIS 2026)
+#    - DeckC delimiting structure (Sec 5.2 / 7.1)
+#    - IOF Core alignment axioms (Sec 5.4 / Fig. 1 caption) -- FLAGGED
+#    - Source-layer data exercised by CQ7 (Sec 7.2; src: namespace)
+#    (V-23401 coordinates and the hierarchy fix were applied inline above.)
+#################################################################
+
+# ── Delimiting structure for the PT-23424 position (Sec 5.2 / 7.1) ───────────
+# Instantiates the individual already named in the skos:example on
+# fl:hasBoundaryDeterminedBy, giving the FunctionalLocation existential
+# restriction (hasBoundaryDeterminedBy some BFO_0000030) a concrete filler and
+# making the dataset match the paper's prose. Typed BFO_0000030 (Object) to
+# satisfy the restriction range with certainty; also typed iof-constr:MaterialArtifact
+# to match Sec 5.2's wording (subject to the same IRI check as the axioms below).
+fl:DeckC_Structure rdf:type owl:NamedIndividual ,
+                            <http://purl.obolibrary.org/obo/BFO_0000030> ,
+                            iof-constr:MaterialArtifact ;
+                   rdfs:label "Deck C mounting structure (PT-23424)"@en ,
+                              "Estrutura de montagem do Deck C (PT-23424)"@pt-br ;
+                   rdfs:comment "Aggregated mounting brackets, nozzle flanges, and deck frame that jointly delimit the PT-23424 transmitter position."@en ,
+                                "Suportes de montagem, flanges de bocais e a estrutura do deck que conjuntamente delimitam a posição do transmissor PT-23424."@pt-br .
+
+fl:FL_PT23424_Site fl:hasBoundaryDeterminedBy fl:DeckC_Structure .
+
+
+# ── IOF Core 202602 alignment (Sec 5.4 and Fig. 1 caption) ─────────────────
+# Verified against Release_202602: MaterialArtifact = iof-constr:MaterialArtifact
+# iof-av: prefix updated to .../annotation/ (202602); maturity replaces maturityLevel;
+# Provisional/Released moved to iof-ind: namespace. The IOF Maintenance dependency
+# was decoupled into the optional extension odp-fl-maint.ttl (v0.7).
+
+# Already entailed once BFO is imported (bfo:Site is immaterial, MaterialArtifact
+# is material), asserted explicitly so the Fig. 1 caption "declared disjoint with
+# iof:MaterialArtifact" is literally true in the artifact.
+fl:FunctionalLocation owl:disjointWith iof-constr:MaterialArtifact .
+
+
+# ── Source-layer data for CQ7 (NOT part of the ODP -- see Sec 7.2) ───────────
+# Production events come from the source schemas the pattern integrates OVER, not
+# from the ODP itself. Modeled in a separate 'src:' namespace so the boundary is
+# explicit in the artifact: the shared fl:FunctionalLocation site is the ONLY join
+# key between src: and fl:. If you keep this, update cqs/cq7.rq to query
+# src:affectsLocation (add the src: PREFIX).
+src:ProductionLossEvent rdf:type owl:Class ;
+                        rdfs:label "Production loss event (source schema)"@en ;
+                        rdfs:comment "Source-schema class, external to the Functional Location ODP. Included only to demonstrate cross-source integration via the shared site (CQ7)."@en .
+
+src:affectsLocation rdf:type owl:ObjectProperty ;
+                    rdfs:range fl:FunctionalLocation ;
+                    rdfs:label "affects location"@en ;
+                    rdfs:comment "Source-schema relation from a production event to the functional locations it affects. Not part of the ODP; the ODP contributes only the site as integration key."@en .
+
+src:eventDate rdf:type owl:DatatypeProperty ;
+              rdfs:range xsd:date ;
+              rdfs:label "event date"@en .
+
+src:E_2024_15 rdf:type owl:NamedIndividual ,
+                       src:ProductionLossEvent ;
+              src:affectsLocation fl:FL_PT23424_Site ,
+                                  fl:FL_V23401_Site ;
+              src:eventDate "2024-07-03"^^xsd:date ;
+              rdfs:label "Production Loss Event E-2024-15"@en ;
+              rdfs:comment "Pressure anomaly at PT-23424; associated separator V-23401 taken offline for inspection."@en .
 
 
 ###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi

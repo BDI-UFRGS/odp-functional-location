@@ -1,8 +1,8 @@
 # Functional Location Ontology Design Pattern (FL-ODP)
 
 ![Status](https://img.shields.io/badge/status-active-success.svg)
-![Version](https://img.shields.io/badge/version-0.5-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Version](https://img.shields.io/badge/version-0.8-blue.svg)
+![License](https://img.shields.io/badge/license-CC%20BY%204.0-blue.svg)
 ![Alignment](https://img.shields.io/badge/alignment-BFO%20%7C%20IOF%20%7C%20IDO--compatible-green)
 ![Language](https://img.shields.io/badge/language-EN%20%7C%20PT--BR-orange)
 
@@ -25,6 +25,8 @@ Equipment Tag ──denotes──→ ┌─────────────�
 FL Specification ──specifies→└─────────────────────┘ ←──installedAt── Equipment
   (engineering reqs)              persistent anchor          (transient physical asset)
 ```
+
+![ODP Diagram](figures/odp-diagram.png)
 
 | ODP Element | BFO Grounding | IDO Grounding | Role |
 |:---|:---|:---|:---|
@@ -163,12 +165,20 @@ fl:WO_2023 a fl:MaintenanceNote ;
 ## Repository Structure
 
 ```
-fl-odp/
-├── fl-odp.ttl                  # Main ontology file (Turtle)
-├── README.md                   # This file
-├── LICENSE                     # MIT License
-└── figures/
-    └── odp-diagram.png         # Pattern diagram
+odp-functional-location/
+├── odp-fl.ttl                  # Main ontology (Turtle)
+├── odp-fl-maint.ttl            # Maintenance extension module
+├── catalog-v001.xml            # Protégé catalog for local import resolution
+├── imports/                    # Local copies of imported ontologies
+│   ├── bfo-2020.rdf
+│   ├── iao.owl
+│   ├── iof-av-202602.rdf
+│   ├── iof-core-202602.rdf
+│   └── iof-maintenance-202602.rdf
+├── figures/
+│   └── odp-diagram.png         # Pattern diagram
+├── LICENSE
+└── README.md
 ```
 
 ## Alignment & Dependencies
@@ -182,7 +192,7 @@ This ontology imports and extends:
 | [IOF Core](https://spec.industrialontologies.org/ontology/core/Core/) | MaintainableMaterialItem, annotation vocabulary |
 | [IOF Maintenance](https://spec.industrialontologies.org/ontology/maintenance/Maintenance/) | MaintenanceActivity |
 
-**IDO compatibility** is demonstrated through a formal element-level mapping (see paper Section 5) but IDO is not imported — the pattern can be adopted as an IDO extension module.
+**IDO compatibility** is demonstrated through a formal element-level mapping but IDO is not imported — the pattern can be adopted as an IDO extension module.
 
 ## Related Work
 
@@ -194,14 +204,27 @@ This ODP is developed as part of the **COPPP** (Core Ontology for Petroleum Prod
 
 ## Contributors
 
-Nicolau Santos · Mara Abel · Haroldo Rojas · Rafael Petry · Regis Romeu · Cauã Antunes · Joel Carbonera · Fabrício Rodrigues
+Nicolau Oyhenard dos Santos · Haroldo Rojas · Cauã Roca Antunes · Fabrício H. Rodrigues · Régis Romeu · Rafael H. Petry · Mara Abel · João César Netto
 
-All contributors are affiliated with the **INF-UFRGS-ENERGIA** research group at the Institute of Informatics, Universidade Federal do Rio Grande do Sul (UFRGS), Porto Alegre, Brazil.
+Affiliations: Instituto de Informática, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil · State University of New York at Buffalo (UB), USA
 
 ## Citation
 
-*Paper in preparation. Citation details will be added upon submission.*
+```bibtex
+@inproceedings{santos2026fl-odp,
+  author    = {Nicolau Oyhenard dos Santos and Haroldo Rojas and Cau{\~a} Roca Antunes
+               and Fabr{\'i}cio H. Rodrigues and R{\'e}gis Romeu and Rafael H. Petry
+               and Mara Abel and Jo{\~a}o C{\'e}sar Netto},
+  title     = {An Ontology Design Pattern for Functional Locations in Industrial Asset Management},
+  booktitle = {Proceedings of the 16th International Conference on Formal Ontology
+               in Information Systems (FOIS 2026)},
+  series    = {Frontiers in Artificial Intelligence and Applications},
+  publisher = {{IOS} Press},
+  year      = {2026},
+  note      = {To appear}
+}
+```
 
 ## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0) — see the [LICENSE](LICENSE) file for details.

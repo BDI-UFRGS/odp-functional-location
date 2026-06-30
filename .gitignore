@@ -1,0 +1,11 @@
+# Protégé
+*.properties
+*.lock
+
+# macOS
+.DS_Store
+
+# Ontology editor backups
+*.owl.bak
+*.ttl.bak
+*.rdf.bak

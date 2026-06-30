@@ -1,0 +1,41 @@
+@prefix fl: <https://www.inf.ufrgs.br/ontologies/odp/functional-location#> .
+@prefix iof-constr: <https://spec.industrialontologies.org/ontology/construct/> .
+@prefix iof-av: <https://spec.industrialontologies.org/ontology/annotation/> .
+@prefix iof-ind: <https://spec.industrialontologies.org/ontology/individual/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@base <https://www.inf.ufrgs.br/ontologies/odp/functional-location/maint> .
+
+#################################################################
+#    FL-ODP — IOF Maintenance bridge (OPTIONAL extension)
+#
+#    Kept separate from the core ODP so the core does not force a
+#    dependency on the IOF Maintenance module. Per the paper (Sec 7.2),
+#    maintenance records/work orders belong to the source/application
+#    layer, not to the pattern itself. Import this file only if you want
+#    the IOF-Maint-aligned property; the core odp-fl.ttl already provides
+#    the role-neutral fl:performedAt (domain fl:MaintenanceNote).
+#################################################################
+
+<https://www.inf.ufrgs.br/ontologies/odp/functional-location/maint> rdf:type owl:Ontology ;
+    owl:imports <https://www.inf.ufrgs.br/ontologies/odp/functional-location> ,
+                <https://spec.industrialontologies.org/ontology/202602/maintenance/Maintenance/> ;
+    rdfs:label "FL-ODP — IOF Maintenance bridge (optional extension)"@en ,
+               "ODP de Local de Instalação — ponte com IOF Maintenance (extensão opcional)"@pt-br ;
+    dcterms:description "Optional extension to the Functional Location ODP that bridges to the IOF Maintenance module. It imports the FL-ODP core and IOF Maintenance 202602 and defines performedAtLocation, relating an iof-constr:MaintenanceActivity to a functional location. Held out of the core so the core ODP does not commit every adopter to the IOF Maintenance module."@en ;
+    owl:versionInfo "0.1" .
+
+
+###  performedAtLocation -- the IOF-Maint-aligned variant of fl:performedAt
+fl:performedAtLocation rdf:type owl:ObjectProperty ;
+                       rdfs:domain iof-constr:MaintenanceActivity ;
+                       rdfs:range fl:FunctionalLocation ;
+                       rdfs:label "performed at location"@en ,
+                                  "realizada no local de instalação"@pt-br ;
+                       iof-av:isPrimitive "true"^^xsd:boolean ;
+                       iof-av:maturity iof-ind:Provisional ;
+                       iof-av:naturalLanguageDefinition "A relation between a maintenance activity (as defined in IOF-Maint) and a functional location such that the maintenance activity is performed at the functional location."@en ,
+                                                        "Uma relação entre uma atividade de manutenção (conforme definida no IOF-Maint) e um local de instalação tal que a atividade de manutenção é realizada no local de instalação."@pt-br .
