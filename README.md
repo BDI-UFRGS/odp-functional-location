@@ -3,6 +3,7 @@
 ![Status](https://img.shields.io/badge/status-active-success.svg)
 ![Version](https://img.shields.io/badge/version-0.8-blue.svg)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-blue.svg)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21072928.svg)](https://doi.org/10.5281/zenodo.21072928)
 ![Alignment](https://img.shields.io/badge/alignment-BFO%20%7C%20IOF%20%7C%20IDO--compatible-green)
 ![Language](https://img.shields.io/badge/language-EN%20%7C%20PT--BR-orange)
 
