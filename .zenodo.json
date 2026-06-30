@@ -4,7 +4,7 @@
   "version": "0.8",
   "language": "eng",
   "access_right": "open",
-  "license": "cc-by-nc-4.0",
+  "license": "cc-by-4.0",
   "description": "This record archives the artifact accompanying the FOIS 2026 paper \"An Ontology Design Pattern for Functional Locations in Industrial Asset Management.\" The Functional Location Ontology Design Pattern (FL-ODP) separates five concerns of an industrial functional location: the persistent location (a bfo:Site), its functional-location code and equipment tag (two centrally registered identifiers that both denote the location), its specification (a directive information entity), and the installed equipment (a material artifact). The deposit contains: the OWL 2 DL ontology (odp-fl.ttl, v0.8, verified consistent with HermiT); an optional IOF-Maintenance bridge extension (odp-fl-maint.ttl); the bundled upper-ontology imports (BFO 2020, IAO, IOF Core 202602, IOF Annotation Vocabulary 202602) with an OWL catalog (catalog-v001.xml) for offline reasoning; seven SPARQL competency-question queries (cqs/cq1.rq through cq7.rq) and a runner; and an anonymized validation dataset from an offshore petroleum platform (a pressure-transmitter position with three documented sensor replacements, a maintenance note, and a ten-year measured time series indexed by the site). The ontology is also published at its resolvable IRI: https://www.inf.ufrgs.br/ontologies/odp/functional-location",
   "keywords": [
     "Functional Location",
@@ -20,14 +20,38 @@
     "Knowledge Graph"
   ],
   "creators": [
-    { "name": "dos Santos, Nicolau Oyhenard", "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil" },
-    { "name": "Rojas, Haroldo", "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil" },
-    { "name": "Antunes, Caua Roca", "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil" },
-    { "name": "Rodrigues, Fabricio H.", "affiliation": "State University of New York at Buffalo (UB), USA" },
-    { "name": "Romeu, Regis", "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil" },
-    { "name": "Petry, Rafael H.", "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil" },
-    { "name": "Abel, Mara", "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil" },
-    { "name": "Netto, Joao Cesar", "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil" }
+    {
+      "name": "dos Santos, Nicolau Oyhenard",
+      "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil"
+    },
+    {
+      "name": "Rojas, Haroldo",
+      "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil"
+    },
+    {
+      "name": "Antunes, Caua Roca",
+      "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil"
+    },
+    {
+      "name": "Rodrigues, Fabricio H.",
+      "affiliation": "State University of New York at Buffalo (UB), USA"
+    },
+    {
+      "name": "Romeu, Regis",
+      "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil"
+    },
+    {
+      "name": "Petry, Rafael H.",
+      "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil"
+    },
+    {
+      "name": "Abel, Mara",
+      "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil"
+    },
+    {
+      "name": "Netto, Joao Cesar",
+      "affiliation": "Instituto de Informatica, Universidade Federal do Rio Grande do Sul (UFRGS), Brazil"
+    }
   ],
   "related_identifiers": [
     {

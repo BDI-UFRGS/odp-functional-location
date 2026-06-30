@@ -2,7 +2,7 @@
 
 Ontology IRI: `https://www.inf.ufrgs.br/ontologies/odp/functional-location`
 Camera-ready version: **0.8**
-License: CC BY-NC 4.0 (matching the FOIS 2026 proceedings)
+License: CC BY 4.0
 
 This file records the changes to the ontology artifact between the anonymized
 version provided for double-blind review and the public camera-ready release that

@@ -29,7 +29,7 @@
                                                                dcterms:creator "Nicolau Santos"@en ;
                                                                dcterms:description "An ontology design pattern for modeling functional locations as persistent spatial sites in industrial asset management systems. The pattern separates four concerns: spatial site (bfo:Site), organizational code (iao:Identifier), equipment tag (iao:Identifier), and functional specification (iao:InformationContentEntity). Both identifiers denote the functional location site, not the physical equipment — the relationship to equipment is always mediated through the site."@en ,
                                                                                    "Um padrão de projeto ontológico para modelar locais de instalação como sítios espaciais persistentes em sistemas de gestão de ativos industriais. O padrão separa quatro preocupações: sítio espacial (bfo:Site), código do local de instalação (iao:Identifier), tag de equipamento (iao:Identifier) e especificação funcional (iao:InformationContentEntity). Ambos os identificadores denotam o local de instalação, não o equipamento físico — a relação com o equipamento é sempre mediada pelo sítio."@pt-br ;
-                                                               dcterms:license <http://opensource.org/licenses/MIT> ;
+                                                               dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
                                                                dcterms:modified "2026-06-27"^^xsd:date ;
                                                                dcterms:subject "Functional Location"@en ,
                                                                                "Gestão de Ativos Industriais"@pt-br ,
@@ -184,12 +184,12 @@ fl:installedAt rdf:type owl:ObjectProperty ;
                rdfs:label "instalado em"@pt-br ,
                           "installed at"@en ;
                skos:example "Sensor_PT23424_v2 installedAt FL_PT23424_Site (2017-06-16 to 2022-03-10)"@en ;
-               iof-av:firstOrderLogicDefinition "installedAt(x,y) → Equipment(x) ∧ FunctionalLocation(y) ∧ ∃t(located_in(x,y,t))"@en ;
+               iof-av:firstOrderLogicDefinition "installedAt(x,y) → MaterialArtifact(x) ∧ FunctionalLocation(y) ∧ ∃t(located_in(x,y,t))"@en ;
                iof-av:isPrimitive "true"^^xsd:boolean ;
                iof-av:maturity iof-ind:Provisional ;
                iof-av:naturalLanguageDefinition "A relation between a piece of equipment and a functional location such that the equipment is physically installed at the functional location during some temporally bounded period. The temporal bounds are captured via installedDate and removedDate data properties."@en ,
                                                 "Uma relação entre uma peça de equipamento e um local de instalação tal que o equipamento está fisicamente instalado no local de instalação durante algum período temporalmente delimitado. Os limites temporais são capturados pelas propriedades de dados installedDate e removedDate."@pt-br ;
-               iof-av:semiFormalNaturalLanguageDefinition "if x installedAt y then x is an Equipment and y is a FunctionalLocation and x is located in y at some time"@en .
+               iof-av:semiFormalNaturalLanguageDefinition "if x installedAt y then x is a MaterialArtifact and y is a FunctionalLocation and x is located in y at some time"@en .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#partOfSystemSite
@@ -448,7 +448,7 @@ fl:FunctionalLocation rdf:type owl:Class ;
                       iof-av:adaptedFrom "ISO 14224:2016 — 'a position in a functional hierarchy where a maintainable item is or can be installed'"@en ;
                       iof-av:explanatoryNote "A escolha de bfo:Site como categoria de fundamentação resulta de uma eliminação sistemática de alternativas: MaterialEntity falha na persistência quando vazio, Role falha na persistência (requer portador), InformationContentEntity falha nas consultas espaciais, SpatialRegion falha na relatividade à estrutura da planta. Somente Site satisfaz todos os requisitos simultaneamente."@pt-br ,
                                              "The choice of bfo:Site as the grounding category results from a systematic elimination of alternatives: MaterialEntity fails persistence when empty, Role fails persistence (requires bearer), InformationContentEntity fails spatial queries, SpatialRegion fails relativity to plant structure. Only Site satisfies all requirements simultaneously."@en ;
-                      iof-av:firstOrderLogicDefinition "FunctionalLocation(x) → Site(x) ∧ ∃y(MaterialEntity(y) ∧ hasBoundaryDeterminedBy(x,y)) ∧ ¬Equipment(x)"@en ;
+                      iof-av:firstOrderLogicDefinition "FunctionalLocation(x) → Site(x) ∧ ∃y(MaterialEntity(y) ∧ hasBoundaryDeterminedBy(x,y)) ∧ ¬MaterialArtifact(x)"@en ;
                       iof-av:isPrimitive "true"^^xsd:boolean ;
                       iof-av:maturity iof-ind:Provisional ;
                       iof-av:naturalLanguageDefinition "A functional location is a site that is a persistent spatial position in an industrial facility hierarchy where a maintainable item is or can be installed, and whose boundaries are determined in relation to delimiting material structures rather than by the equipment that may occupy it."@en ,
@@ -634,12 +634,12 @@ fl:SeparationEquipment rdf:type owl:Class ;
                                   "Separation Equipment"@en ;
                        iof-av:explanatoryNote "Modelado como um universal (classe primitiva com condições necessárias), não uma classe definida. Instâncias são assertadas como SeparationEquipment, não inferidas apenas pela função. Isto segue a abordagem do COPPP onde universais de tipos de equipamento carregam axiomas necessários mas a classificação requer asserção de especialista de domínio."@pt-br ,
                                               "Modeled as a universal (primitive class with necessary conditions), not a defined class. Instances are asserted as SeparationEquipment, not inferred from function alone. This follows the COPPP approach where equipment type universals carry necessary axioms but classification requires domain expert assertion."@en ;
-                       iof-av:firstOrderLogicDefinition "SeparationEquipment(x) → Equipment(x) ∧ ∃f(SeparationFunction(f) ∧ bears(x,f))"@en ;
+                       iof-av:firstOrderLogicDefinition "SeparationEquipment(x) → MaterialArtifact(x) ∧ ∃f(SeparationFunction(f) ∧ bears(x,f))"@en ;
                        iof-av:isPrimitive "true"^^xsd:boolean ;
                        iof-av:maturity iof-ind:Provisional ;
                        iof-av:naturalLanguageDefinition "A separation equipment is an equipment item that bears a separation function, i.e., it is designed to divide a mixture into two or more distinct output streams."@en ,
                                                         "Um equipamento de separação é um item de equipamento que porta uma função de separação, ou seja, é projetado para dividir uma mistura em dois ou mais fluxos de saída distintos."@pt-br ;
-                       iof-av:semiFormalNaturalLanguageDefinition "every instance of SeparationEquipment is an instance of Equipment that bears some SeparationFunction"@en .
+                       iof-av:semiFormalNaturalLanguageDefinition "every instance of SeparationEquipment is an instance of MaterialArtifact that bears some SeparationFunction"@en .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#SeparationFunction
