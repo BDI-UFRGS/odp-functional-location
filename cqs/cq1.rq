@@ -1,0 +1,21 @@
+# CQ1: Which equipment is currently installed at a given functional location?
+#
+# Entry point: equipment tag label "PT-23424" (or via FL code label).
+# "Currently installed" = installedAt asserted AND removedDate absent.
+# The join goes: tag label → identifiesLocation → site → installedAt ← equipment.
+# No equipment-specific logic needed; the site mediates the connection.
+#
+# Expected: 1 row — fl:Sensor_PT23424_v3, installedDate 2022-03-11T09:15:00
+
+PREFIX fl:   <https://www.inf.ufrgs.br/ontologies/odp/functional-location#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?equipment ?installedDate WHERE {
+  ?tag a fl:EquipmentTag ;
+       rdfs:label "PT-23424"@en ;
+       fl:identifiesLocation ?loc .
+  ?equipment fl:installedAt ?loc ;
+             fl:installedDate ?installedDate .
+  FILTER NOT EXISTS { ?equipment fl:removedDate ?d }
+}

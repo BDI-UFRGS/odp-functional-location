@@ -1,0 +1,33 @@
+# CQ2: All maintenance records for a functional location across equipment replacements.
+#
+# This is Listing 1 from the camera-ready paper (verbatim query + required PREFIX block).
+# The query retrieves both MaintenanceNote individuals (via performedAt) and
+# TimeStampedMeasuredDataset individuals (via indexedBySite) through the SAME persistent
+# site — no equipment-specific join, no application logic to "stitch" data across
+# the three sensor replacements.
+#
+# The code entry point (fl:identifies) yields identical bindings:
+#   ?code a fl:FunctionalLocationCode ; rdfs:label "30234.FSFS.FWSF.10.01.01"@en ;
+#         fl:identifies ?loc .
+# (See cq2_via_code.rq for the alternate entry point verification.)
+#
+# Expected: 2 rows
+#   fl:WorkOrder_2023_05_15  ts=2023-05-15T14:30:00
+#   fl:TS_Pressure_PT23424   ts=UNBOUND (TimeStampedMeasuredDataset has no noteTimestamp)
+# ORDER BY ?ts: UNBOUND values sort before bound values in standard SPARQL,
+# so TS_Pressure_PT23424 appears first.
+
+PREFIX fl:   <https://www.inf.ufrgs.br/ontologies/odp/functional-location#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?record ?ts WHERE {
+  ?tag a fl:EquipmentTag ;
+       rdfs:label "PT-23424"@en ;
+       fl:identifiesLocation ?loc .
+  { ?record a fl:MaintenanceNote ;
+            fl:performedAt ?loc ;
+            fl:noteTimestamp ?ts . }
+  UNION
+  { ?record a fl:TimeStampedMeasuredDataset ;
+            fl:indexedBySite ?loc . }
+} ORDER BY ?ts

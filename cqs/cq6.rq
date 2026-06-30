@@ -1,0 +1,40 @@
+# CQ6: List all separation equipment and the functional locations whose specifications
+#      require that function kind (prescriptive-realized join via subsumption).
+#
+# Two mechanisms:
+# (1) SUBSUMPTION: fl:Separator_V23401_v1 is asserted as fl:GasLiquidSeparator.
+#     The SPARQL property path rdf:type/rdfs:subClassOf* reaches fl:SeparationEquipment
+#     through the TBox chain: GasLiquidSeparator ⊑ SeparationEquipment ⊑ iof-constr:MaterialArtifact.
+#     This works in rdflib over the local graph without a reasoner.
+# (2) PRESCRIPTIVE-REALIZED JOIN: the borne function instance (GasLiquidSeparationFunction_2)
+#     and the required function instance (GasLiquidSeparationFunction_1) share the same
+#     rdf:type (fl:GasLiquidSeparationFunction), which is a subclass of fl:SeparationFunction.
+#     The join is ?bf rdf:type ?fkind AND ?rf rdf:type ?fkind.
+#
+# BFO_0000196 (bears) is used by its full BFO IRI — it is not declared in fl: namespace.
+#
+# Expected: 1 row
+#   eq=fl:Separator_V23401_v1  loc=fl:FL_V23401_Site  fkind=fl:GasLiquidSeparationFunction
+
+PREFIX fl:   <https://www.inf.ufrgs.br/ontologies/odp/functional-location#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX bfo196: <http://purl.obolibrary.org/obo/BFO_0000>
+
+SELECT ?eq ?loc ?fkind WHERE {
+  # Retrieve separation equipment via subsumption property path
+  ?eq rdf:type/rdfs:subClassOf* fl:SeparationEquipment ;
+      <http://purl.obolibrary.org/obo/BFO_0000196> ?bf ;
+      fl:installedAt ?loc .
+
+  # Function kind borne by the equipment
+  ?bf rdf:type ?fkind .
+  ?fkind rdfs:subClassOf* fl:SeparationFunction .
+  FILTER(?fkind != owl:NamedIndividual)
+  FILTER(STRSTARTS(STR(?fkind), STR(fl:)))
+
+  # Specification prescribing the same function kind at the same location
+  ?spec fl:specifiesLocation ?loc ;
+        fl:requiresFunction ?rf .
+  ?rf rdf:type ?fkind .
+}

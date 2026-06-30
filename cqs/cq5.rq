@@ -1,0 +1,34 @@
+# CQ5: Which equipment is installed within 10 meters of a given functional location?
+#
+# Uses the hasCoordinateX/Y/Z data properties on FunctionalLocation individuals
+# to compute 3D Euclidean distance between the reference site and candidate sites.
+# After PATCH 2, FL_V23401_Site has coordinates (144.8, 66.5, 8.0).
+# FL_PT23424_Site has coordinates (145.4, 67.8, 12.6).
+# Distance = sqrt(0.36 + 1.69 + 21.16) = sqrt(23.21) ≈ 4.82 m — within 10 m.
+#
+# The spatial data is anchored to the SITE, not to the equipment.
+# When equipment is replaced, the coordinates remain valid for the new occupant.
+#
+# Expected: 1 row
+#   equipment=fl:Separator_V23401_v1  candidate_site=fl:FL_V23401_Site  dist≈4.82
+
+PREFIX fl:   <https://www.inf.ufrgs.br/ontologies/odp/functional-location#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?equipment ?candidate_site WHERE {
+  ?ref_tag a fl:EquipmentTag ;
+           rdfs:label "PT-23424"@en ;
+           fl:identifiesLocation ?ref_site .
+  ?ref_site fl:hasCoordinateX ?rx ;
+            fl:hasCoordinateY ?ry ;
+            fl:hasCoordinateZ ?rz .
+  ?candidate_site rdf:type/rdfs:subClassOf* fl:FunctionalLocation ;
+                  fl:hasCoordinateX ?cx ;
+                  fl:hasCoordinateY ?cy ;
+                  fl:hasCoordinateZ ?cz .
+  FILTER(?candidate_site != ?ref_site)
+  ?equipment fl:installedAt ?candidate_site .
+  FILTER NOT EXISTS { ?equipment fl:removedDate ?d }
+  FILTER((?cx - ?rx)*(?cx - ?rx) + (?cy - ?ry)*(?cy - ?ry) + (?cz - ?rz)*(?cz - ?rz) < 100.0)
+}

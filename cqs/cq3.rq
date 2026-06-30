@@ -1,0 +1,29 @@
+# CQ3: List all functional locations within a subsystem (transitive partOfSystemSite).
+#
+# partOfSystemSite is declared owl:TransitiveProperty and sub-property of bfo:part_of.
+# SPARQL property path (+) traverses the transitivity in rdflib over the local graph
+# (no reasoner required for this query).
+#
+# The query asks: "which FLs are in the Inlet Separator subsystem?"
+# After PATCH 1 (FL_PT23424_Site partOfSystemSite FL_V23401_Site), the hierarchy is:
+#   InletSeparator_Site (SubsystemSite, L3)
+#     └─ FL_V23401_Site (EquipmentUnitSite, L4)
+#          └─ FL_PT23424_Site (MaintainableItemSite, L5)
+# The original TTL also has FL_PT23424_Site partOfSystemSite InletSeparator_Site (direct),
+# so FL_PT23424_Site appears regardless of whether PATCH 1 is applied.
+#
+# Expected: 2 rows
+#   fl:FL_V23401_Site   fl:EquipmentUnitSite
+#   fl:FL_PT23424_Site  fl:MaintainableItemSite
+
+PREFIX fl:   <https://www.inf.ufrgs.br/ontologies/odp/functional-location#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+
+SELECT DISTINCT ?fl ?type WHERE {
+  ?fl fl:partOfSystemSite+ fl:InletSeparator_Site .
+  ?fl a ?type .
+  FILTER(?type != owl:NamedIndividual)
+  FILTER(STRSTARTS(STR(?type), "https://www.inf.ufrgs.br/ontologies/odp/functional-location#"))
+}
+ORDER BY ?fl

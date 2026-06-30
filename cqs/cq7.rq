@@ -1,0 +1,63 @@
+# CQ7: For production loss event E-2024-15, retrieve maintenance notes, equipment
+#      history, specifications, and measured-data series for all affected
+#      functional locations.
+#
+# Mechanism: the site is the integration key. The event (src:E_2024_15) references
+# locations via src:affectsLocation — a source-schema property in the src: namespace,
+# separate from the ODP itself. Maintenance notes reference the same location via
+# fl:performedAt; equipment history via fl:installedAt; specifications via
+# fl:specifiesLocation; time-stamped measured data via fl:indexedBySite. No
+# record-linkage heuristics needed — the site IRI is the shared join key across all
+# source types.
+#
+# The src: namespace is explicitly distinct from fl: to mark the boundary: the ODP
+# contributes only the shared site individual (fl:FunctionalLocation) as the
+# integration key; the source schema contributes the event and its affectsLocation link.
+#
+# Expected: multiple rows for FL_PT23424_Site and FL_V23401_Site:
+#   MaintenanceNote:   WorkOrder_2023_05_15 at FL_PT23424_Site
+#   EquipmentHistory:  Sensor_PT23424_v1, v2, v3 at FL_PT23424_Site;
+#                      Separator_V23401_v1 at FL_V23401_Site
+#   Specification:     Spec_PT23424 at FL_PT23424_Site;
+#                      Spec_V23401 at FL_V23401_Site
+#   TimeSeries:        time-stamped measured dataset indexed by FL_PT23424_Site
+
+PREFIX fl:   <https://www.inf.ufrgs.br/ontologies/odp/functional-location#>
+PREFIX src:  <https://www.inf.ufrgs.br/ontologies/odp/functional-location/source-schema#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?loc ?source_type ?record ?detail WHERE {
+  src:E_2024_15 src:affectsLocation ?loc .
+  {
+    # Maintenance notes anchored to the affected site
+    ?record a fl:MaintenanceNote ;
+            fl:performedAt ?loc ;
+            fl:noteTimestamp ?detail .
+    BIND("MaintenanceNote" AS ?source_type)
+  }
+  UNION
+  {
+    # All equipment installations at the affected site (full history including past)
+    ?record fl:installedAt ?loc ;
+            fl:installedDate ?detail .
+    BIND("EquipmentHistory" AS ?source_type)
+  }
+  UNION
+  {
+    # Functional location specifications at the affected site
+    ?record a fl:FunctionalLocationSpecification ;
+            fl:specifiesLocation ?loc .
+    BIND("Specification" AS ?source_type)
+    BIND("N/A"^^xsd:string AS ?detail)
+  }
+  UNION
+  {
+    # Time-stamped measured data indexed by the affected site
+    ?record a fl:TimeStampedMeasuredDataset ;
+            fl:indexedBySite ?loc .
+    BIND("TimeSeries" AS ?source_type)
+    BIND("N/A"^^xsd:string AS ?detail)
+  }
+}
+ORDER BY ?loc ?source_type ?detail

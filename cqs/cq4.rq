@@ -1,0 +1,20 @@
+# CQ4: Which functional locations require the gas-liquid separation function?
+#
+# Queries via the FunctionalLocationSpecification: spec → requiresFunction → function instance,
+# then checks function instance type. No reasoner needed — function instances are directly
+# asserted as fl:GasLiquidSeparationFunction in the ABox.
+#
+# This demonstrates the prescriptive direction of the pattern: the specification
+# records what the position REQUIRES, independently of what equipment is installed.
+#
+# Expected: 1 row
+#   loc=fl:FL_V23401_Site  spec=fl:Spec_V23401
+
+PREFIX fl:   <https://www.inf.ufrgs.br/ontologies/odp/functional-location#>
+
+SELECT ?loc ?spec WHERE {
+  ?spec a fl:FunctionalLocationSpecification ;
+        fl:specifiesLocation ?loc ;
+        fl:requiresFunction ?f .
+  ?f a fl:GasLiquidSeparationFunction .
+}
