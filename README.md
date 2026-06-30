@@ -22,7 +22,7 @@ FL Specification ──specifies→└──────────────
   (engineering reqs)              persistent anchor          (transient physical asset)
 ```
 
-![ODP Diagram](figures/odp-diagram.png)
+![ODP Diagram](figures/odp-diagram.jpg)
 
 | ODP Element | BFO Grounding | IDO Grounding | Role |
 |:---|:---|:---|:---|
@@ -175,7 +175,7 @@ odp-functional-location/
 ├── cqs/                        # SPARQL competency question queries
 │   ├── cq1.rq … cq7.rq
 ├── figures/
-│   └── odp-diagram.png         # Pattern diagram
+│   └── odp-diagram.jpg         # Pattern diagram
 ├── verify_cqs.py               # Automated CQ runner
 ├── CHANGELOG.md
 ├── LICENSE
