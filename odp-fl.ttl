@@ -200,7 +200,7 @@ fl:partOfSystemSite rdf:type owl:ObjectProperty ;
                     rdfs:range fl:FunctionalLocation ;
                     rdfs:label "part of system site"@en ,
                                "parte de sítio do sistema"@pt-br ;
-                    skos:example "MaintainableItemSite partOfSystemSite SubsystemSite"@en ,
+                    skos:example "MaintainableItemSite partOfSystemSite EquipmentUnitSite"@en ,
                                  "SubsystemSite partOfSystemSite SystemSite"@en ;
                     iof-av:firstOrderLogicDefinition "partOfSystemSite(x,y) → FunctionalLocation(x) ∧ FunctionalLocation(y) ∧ partOf(x,y)"@en ;
                     iof-av:isPrimitive "true"^^xsd:boolean ;
