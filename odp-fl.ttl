@@ -21,16 +21,16 @@
                                                                            <https://spec.industrialontologies.org/ontology/202602/core/Core/> ;
                                                                dcterms:contributor "Cauã Antunes"@en ,
                                                                                    "Haroldo Rojas"@en ,
-                                                                                   "Joel Carbonera"@en ,
+                                                                                   "Fabrício Rodrigues"@en ,
                                                                                    "Mara Abel"@en ,
                                                                                    "Rafael Petry"@en ,
                                                                                    "Regis Romeu"@en ;
                                                                dcterms:created "2025-12-17"^^xsd:date ;
                                                                dcterms:creator "Nicolau Santos"@en ;
-                                                               dcterms:description "An ontology design pattern for modeling functional locations as persistent spatial sites in industrial asset management systems. The pattern separates four concerns: spatial site (bfo:Site), organizational code (iao:Identifier), equipment tag (iao:Identifier), and functional specification (iao:InformationContentEntity). Both identifiers denote the functional location site, not the physical equipment — the relationship to equipment is always mediated through the site."@en ,
-                                                                                   "Um padrão de projeto ontológico para modelar locais de instalação como sítios espaciais persistentes em sistemas de gestão de ativos industriais. O padrão separa quatro preocupações: sítio espacial (bfo:Site), código do local de instalação (iao:Identifier), tag de equipamento (iao:Identifier) e especificação funcional (iao:InformationContentEntity). Ambos os identificadores denotam o local de instalação, não o equipamento físico — a relação com o equipamento é sempre mediada pelo sítio."@pt-br ;
+                                                               dcterms:description "An ontology design pattern for modeling functional locations as persistent spatial sites in industrial asset management systems. The pattern separates five concerns: spatial site (bfo:Site), organizational code (iao:CentrallyRegisteredIdentifier), equipment tag (iao:CentrallyRegisteredIdentifier), functional specification (iao:DirectiveInformationEntity), and installed equipment (iof:MaterialArtifact). Both identifiers denote the functional location site, not the physical equipment — the relationship to equipment is always mediated through the site."@en ,
+                                                                                   "Um padrão de projeto ontológico para modelar locais de instalação como sítios espaciais persistentes em sistemas de gestão de ativos industriais. O padrão separa cinco preocupações: sítio espacial (bfo:Site), código do local de instalação (iao:CentrallyRegisteredIdentifier), tag de equipamento (iao:CentrallyRegisteredIdentifier), especificação funcional (iao:DirectiveInformationEntity) e equipamento instalado (iof:MaterialArtifact). Ambos os identificadores denotam o local de instalação, não o equipamento físico — a relação com o equipamento é sempre mediada pelo sítio."@pt-br ;
                                                                dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
-                                                               dcterms:modified "2026-06-27"^^xsd:date ;
+                                                               dcterms:modified "2026-07-01"^^xsd:date ;
                                                                dcterms:subject "Functional Location"@en ,
                                                                                "Gestão de Ativos Industriais"@pt-br ,
                                                                                "ISO 14224"@en ,
@@ -38,9 +38,9 @@
                                                                                "Local de Instalação"@pt-br ;
                                                                dcterms:title "Functional Location Ontology Design Pattern"@en ,
                                                                              "Padrão de Projeto Ontológico para Locais de Instalação"@pt-br ;
-                                                               owl:versionInfo "0.8" ;
+                                                               owl:versionInfo "0.8.1" ;
                                                                dcterms:hasVersion <https://doi.org/10.5281/zenodo.21072929> ;
-                                                               skos:historyNote "v0.1: Initial pattern. v0.2: Added specification class. v0.3: Corrected EquipmentTag semantics (denotes FL, not equipment). v0.4: Full IOF annotation compliance, bilingual EN/PT-BR annotations. v0.5: Added restricting logical axioms (cardinality, existential restrictions, hierarchy level constraints, disjointness), function universals, equipment type universals (COPPP style — primitive classes with necessary conditions). v0.6: Reconciled to IOF Core Release_202602: iof-av: prefix updated to annotation/ namespace, iof-av:maturity replaces maturityLevel, Provisional/Released moved to iof-ind: namespace, MaintenanceActivity IRI corrected to iof-constr:, Equipment annotations updated to MaterialArtifact, Maintenance module added to owl:imports. v0.7: Widened hasBoundaryDeterminedBy range and the FunctionalLocation existential from BFO_0000030 (object) to BFO_0000040 (material entity), matching the FOL annotation and the paper; decoupled the IOF Maintenance dependency into the optional extension odp-fl-maint.ttl by removing the Maintenance import and the performedAtLocation property from the core. v0.8: Removed the intermediate fl:Equipment class; specific equipment types (Sensor, Valve, SeparationEquipment) now specialize iof-constr:MaterialArtifact directly per IOF Core guidance, and installedAt/installedDate/removedDate/hasTag/hostedBy were repointed to iof-constr:MaterialArtifact. The pre-existing FunctionalLocation-disjoint-with-MaterialArtifact axiom now carries the equipment/location disjointness."@en ;
+                                                               skos:historyNote "v0.1: Initial pattern. v0.2: Added specification class. v0.3: Corrected EquipmentTag semantics (denotes FL, not equipment). v0.4: Full IOF annotation compliance, bilingual EN/PT-BR annotations. v0.5: Added restricting logical axioms (cardinality, existential restrictions, hierarchy level constraints, disjointness), function universals, equipment type universals (COPPP style — primitive classes with necessary conditions). v0.6: Reconciled to IOF Core Release_202602: iof-av: prefix updated to annotation/ namespace, iof-av:maturity replaces maturityLevel, Provisional/Released moved to iof-ind: namespace, MaintenanceActivity IRI corrected to iof-constr:, Equipment annotations updated to MaterialArtifact, Maintenance module added to owl:imports. v0.7: Widened hasBoundaryDeterminedBy range and the FunctionalLocation existential from BFO_0000030 (object) to BFO_0000040 (material entity), matching the FOL annotation and the paper; decoupled the IOF Maintenance dependency into the optional extension odp-fl-maint.ttl by removing the Maintenance import and the performedAtLocation property from the core. v0.8: Removed the intermediate fl:Equipment class; specific equipment types (Sensor, Valve, SeparationEquipment) now specialize iof-constr:MaterialArtifact directly per IOF Core guidance, and installedAt/installedDate/removedDate/hasTag/hostedBy were repointed to iof-constr:MaterialArtifact. The pre-existing FunctionalLocation-disjoint-with-MaterialArtifact axiom now carries the equipment/location disjointness. v0.8.1: Aligned identifies/identifiesLocation to iao:denotes (IAO_0000219), matching the paper (Sec. 5.3) and the FOL annotations; corrected the ontology description to state five concerns with precise groundings (CRID, DirectiveInformationEntity, iof:MaterialArtifact)."@en ;
                                                                iof-av:maturity iof-ind:Provisional .
 
 #################################################################
@@ -130,7 +130,7 @@ fl:hostedBy rdf:type owl:ObjectProperty ;
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#identifies
 fl:identifies rdf:type owl:ObjectProperty ;
-              rdfs:subPropertyOf <http://purl.obolibrary.org/obo/IAO_0000136> ;
+              rdfs:subPropertyOf <http://purl.obolibrary.org/obo/IAO_0000219> ;
               rdf:type owl:FunctionalProperty ;
               rdfs:domain fl:FunctionalLocationCode ;
               rdfs:range fl:FunctionalLocation ;
@@ -146,7 +146,7 @@ fl:identifies rdf:type owl:ObjectProperty ;
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#identifiesLocation
 fl:identifiesLocation rdf:type owl:ObjectProperty ;
-                      rdfs:subPropertyOf <http://purl.obolibrary.org/obo/IAO_0000136> ;
+                      rdfs:subPropertyOf <http://purl.obolibrary.org/obo/IAO_0000219> ;
                       rdf:type owl:FunctionalProperty ;
                       rdfs:domain fl:EquipmentTag ;
                       rdfs:range fl:FunctionalLocation ;
@@ -396,7 +396,7 @@ fl:EquipmentTag rdf:type owl:Class ;
                 iof-av:maturity iof-ind:Provisional ;
                 iof-av:naturalLanguageDefinition "An equipment tag is an identifier that denotes a functional location through industrial naming conventions, where the tag prefix encodes the expected equipment type at the position. The tag does not denote the physical equipment — the relationship between tag and equipment is mediated through the functional location."@en ,
                                                  "Uma tag de equipamento é um identificador que denota um local de instalação através de convenções industriais de nomenclatura, onde o prefixo da tag codifica o tipo esperado de equipamento na posição. A tag não denota o equipamento físico — a relação entre tag e equipamento é mediada pelo local de instalação."@pt-br ;
-                iof-av:semiFormalNaturalLanguageDefinition "every instance of EquipmentTag is an instance of iao:Identifier that identifiesLocation exactly one FunctionalLocation and that is disjoint from FunctionalLocationCode"@en ;
+                iof-av:semiFormalNaturalLanguageDefinition "every instance of EquipmentTag is an instance of iao:CentrallyRegisteredIdentifier that identifiesLocation exactly one FunctionalLocation and that is disjoint from FunctionalLocationCode"@en ;
                 iof-av:usageNote "Quando engenheiros dizem 'válvula XV-23424', eles usam a tag de equipamento como uma abreviação pragmática para 'o equipamento atualmente instalado na posição denotada por XV-23424'."@pt-br ,
                                  "When engineers say 'valve XV-23424', they use the equipment tag as a pragmatic shorthand for 'the equipment currently installed at the position denoted by XV-23424'."@en .
 
@@ -486,7 +486,7 @@ fl:FunctionalLocationCode rdf:type owl:Class ;
                           iof-av:maturity iof-ind:Provisional ;
                           iof-av:naturalLanguageDefinition "A functional location code is an identifier that denotes a functional location by encoding the position's place in the ISO 14224 organizational hierarchy, with segments representing plant, system, subsystem, equipment unit, and maintainable item levels."@en ,
                                                            "Um código de local de instalação é um identificador que denota um local de instalação codificando a posição do local na hierarquia organizacional ISO 14224, com segmentos representando os níveis de planta, sistema, subsistema, unidade de equipamento e item manutenível."@pt-br ;
-                          iof-av:semiFormalNaturalLanguageDefinition "every instance of FunctionalLocationCode is an instance of iao:Identifier that identifies exactly one FunctionalLocation and that is disjoint from EquipmentTag"@en .
+                          iof-av:semiFormalNaturalLanguageDefinition "every instance of FunctionalLocationCode is an instance of iao:CentrallyRegisteredIdentifier that identifies exactly one FunctionalLocation and that is disjoint from EquipmentTag"@en .
 
 
 ###  https://www.inf.ufrgs.br/ontologies/odp/functional-location#FunctionalLocationSpecification
